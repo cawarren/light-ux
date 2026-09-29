@@ -1,4 +1,17 @@
-# Latency Ladder: Phase 0 scope
+# Latency Ladder: Phase 0 scope (rig work now deferred to Phase C)
+
+> **Rephased 2026-09-29.** The plan now starts with a software-only web ladder (Phase A, scoped in [`docs/phase-a/`](../phase-a/README.md)). A minimal photodiode rig comes in Phase B, and the full rig described here in Phase C. See the spec's [Phased plan](../spec.md#phased-plan). This page is kept as the Phase C scope. What it contains now belongs to these phases:
+>
+> | Content here | New phase |
+> | --- | --- |
+> | Report 05: dataset, reference ranking, R1, cheap parity checks | **Phase A**, unchanged |
+> | Report 06: X1 Carbon setup (xe settings, KWin, whole-number scaling, cold boot, pinned versions) | **Phase A** (the laptop is the Phase A test machine) |
+> | Report 03: data model, statistics, reports | **Phase A**, with software measurements as the source; device layer and mock rig in Phase B/C |
+> | Corrections S3 (marker), S4 (key cadence), S9–S12 (ranking, keyboard parity, dataset size, marker timing in React) | **Phase A** |
+> | Reports 01–02: a minimal subset (Teensy, one BPW34 sensor, HID output, simple edge detection) | **Phase B** |
+> | Reports 01–04 and 07 in full: rig, isolation, calibration, floors, camera, second photodiode | **Phase C** |
+>
+> Of the decisions below, these are needed before Phase A work: 7 (marker placement), 8 (test machine), 10 (windowed vs fullscreen), 12 (Chrome pinning), 13 (Wayland compositor), 15 (panel self-refresh), 17 (key cadence), and all of D-C (22–32). The rest wait for Phase B or C.
 
 Scoped 2026-09-29 against [`docs/spec.md`](../spec.md). This page combines five scoping reports:
 

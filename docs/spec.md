@@ -29,8 +29,8 @@ Version 1 answers one question: how much latency does each layer of a typical we
 
 **Non-goals for version 1**
 
-- A production UI library. Rungs are test fixtures, not products. Extracting a library is Phase 4.
-- Network and data-layer latency, such as spinners and round trips. A local-first rung is Phase 4.
+- A production UI library. Rungs are test fixtures, not products. Extracting a library is Phase D.
+- Network and data-layer latency, such as spinners and round trips. A local-first rung is Phase D.
 - Browsers other than Chrome. Safari and Firefox come after the first results.
 - Visual design beyond matching the default shadcn look.
 
@@ -91,6 +91,8 @@ A rung that fails any check is still measured but reported as non-parity, so it 
 | Sandbox | Web rungs run with default browser security; no flags that weaken it | Launch config review |
 
 ## Measurement harness
+
+*Phase C (see Phased plan). Phase A uses software instrumentation instead; Phase B uses a minimal version of this rig.*
 
 The harness is the real steel thread: a microcontroller posing as a USB keyboard and mouse sends input, and a photodiode on the screen times the result. It captures the whole pipeline, including the OS compositor and the display, which in-app timers miss.
 
@@ -168,17 +170,33 @@ Four machines cover the questions that matter: a fast desktop, a second OS, the 
 
 ## Phased plan
 
-The plan builds the two endpoints first, so the project learns within four weeks whether the gap is worth attributing. Durations assume agents write most rung code and one person owns the rig.
+*Rephased 2026-09-29.* The original plan built the hardware rig first. The revised plan starts with the cheapest experiment that could show the idea is wrong, and adds measurement rigor only after each gate shows there is enough to justify it. The first gaps are likely large: cmdk's scoring alone costs 55–285 ms per keystroke at 50k items (docs/phase-0/05-software-foundations.md). Software instrumentation resolves gaps of that size well. The photodiode rig earns its cost when differences shrink to about a frame, or when a comparison crosses the browser boundary, where in-app timers stop being comparable.
 
-&#91;embedded content: Roadmap · 5 phases, 4 gates, about 10 weeks to published results\]
+| Phase | Builds | Measures with | Hardware | Gate at the end |
+| --- | --- | --- | --- | --- |
+| **A. Web ladder, software only** (~2 weeks) | Dataset and reference ranking; R1, R2, R3 (R4 optional) in Chrome; a playground with blind comparison | Chrome `EventLatency` traces and the Event Timing API, driven by real OS-level input (`uinput`) on the reference laptop; blind ABX trials; 240 fps phone video for spot checks | None | **Gate A:** is the R1→R3 gap large (≥3× or several frames at p95), and can a person tell rungs apart blind more often than chance? |
+| **B. Cross the browser boundary** (~2–3 weeks) | R5 native (and R4 if not built in A) | A minimal photodiode rig: Teensy and one sensor, simple edge detection, no calibration suite, camera or isolation | ~$40 | **Gate B:** is the browser tax (R4→R5) large enough to warrant frame-level attribution? |
+| **C. Rigorous and publishable** (~4–6 weeks) | R6; full parity suite; agent optimization loop | The full rig, calibration and validation camera scoped in docs/phase-0 (reports 01–04, 06, 07); several machines; two-day reproducibility | Full rig, camera | Publish results, rig design and raw data |
+| **D. Extensions** | Library extraction, local-first rung, sample app, other browsers, dataset size sweep | As in C | — | — |
 
-Gate 1 is the decision that matters: a small gap between R1 and R5 is a publishable result on its own and saves Phases 2 and 3.
+**What each gate can and cannot conclude.** Phase A measures only the framework and DOM layers. A small gap at Gate A refutes the lazy-tax part of the hypothesis for those layers. It says nothing about the browser, compositor or display costs, which only Phase B and C can see. Deciding whether to continue past Gate A is therefore two decisions: whether to pursue the web rungs further, and separately whether to pursue the browser boundary.
 
-**Phase 0 checklist**
+**Kept from the original plan.** Every rung draws the latency marker in the same frame as its list update from day one, so Phase A rungs work unchanged under the rig later. Phase A's data model and statistics are the orchestrator's (docs/phase-0/03-orchestrator.md), with software measurements as the source.
+
+**Phase A checklist** (detail in docs/phase-a/README.md)
+
+- [ ] Dataset generator and reference ranker (TS and Rust), with golden files
+- [ ] R1 (stock shadcn Command), R2 and R3, each drawing the marker in the same frame as the list
+- [ ] Software harness: pinned Chrome, `uinput` keystrokes, trace and Event Timing collection, correctness checks, p50/p95/p99 report with per-stage breakdown
+- [ ] Playground with blind ABX mode and an adjustable added-latency control, to calibrate what differences are perceptible
+- [ ] Phone slow-motion spot check against the software numbers
+- [ ] Gate A review
+
+**Deferred to Phase C** (the original Phase 0 checklist, scoped in docs/phase-0/)
 
 - [ ] Order the microcontroller, photodiode, amplifier and screen mount
-- [ ] Write rig firmware: USB keyboard and mouse output, 20 kHz light sampling, timestamped log
-- [ ] Write the orchestrator: N trials, randomized delays, CSV output
+- [ ] Write rig firmware: USB keyboard and mouse output, light sampling at ≥100 kS/s (not 20 kHz; see docs/phase-0 S1), timestamped log
+- [ ] Write the orchestrator: N trials, randomized delays, Parquet output
 - [ ] Build the display-floor app and the browser-floor page
 - [ ] Run calibration on two separate days and compare
 
@@ -190,7 +208,7 @@ With coding capacity effectively unlimited, the bottleneck becomes measurement a
 
 1. An agent proposes a change in that rung's repository.
 2. The build runs, then the full parity suite. Any failure rejects the change.
-3. The rig runs 200 trials on the reference machine.
+3. The harness runs 200 trials on the reference machine (the software harness in Phase A; the rig from Phase C).
 4. The change is accepted only if p95 improves by more than the measured noise band.
 5. Accepted changes are re-measured on a second machine before they count.
 
@@ -199,7 +217,7 @@ With coding capacity effectively unlimited, the bottleneck becomes measurement a
 - Agents cannot modify the harness, rig firmware, parity suite or dataset generator.
 - Final measurements use held-out datasets and queries the agents never saw.
 - Detecting the test environment, dataset or seed is forbidden and checked in code review.
-- The marker-honesty camera check runs on every accepted change.
+- The marker-honesty check runs on every accepted change (a software same-frame check in Phase A; the second photodiode and camera from Phase C).
 - A human reviews any change that touches input handling, frame timing or present modes.
 
 **Fairness between rungs.** Each of R2 to R5 gets the same agent budget, and actual effort is recorded as a result. The cost of optimization is part of the answer, because it speaks to the business argument for why teams skip it.
@@ -215,7 +233,7 @@ The biggest risk is a result that looks dramatic but only reflects a skipped fea
 | Scenario too easy on fast hardware | R1 looks fine on the desktop, hiding the effect | Budget laptop in the matrix; dataset size sweep |
 | Refresh-phase aliasing | Results cluster around frame boundaries and mislead | Randomized trial timing; 500+ trials |
 | R4 accessibility mirror is costly | The DOM mirror eats the gain from bypassing the DOM | Measure R4 with and without the mirror; report both |
-| One component is not an app | Results may not generalize | Phase 4 builds a sample app from the fastest rung |
+| One component is not an app | Results may not generalize | Phase D builds a sample app from the fastest rung |
 | Agents overfit the benchmark | Gains vanish on real data | Held-out datasets; second-machine confirmation |
 
 **Open questions**
@@ -223,7 +241,7 @@ The biggest risk is a result that looks dramatic but only reflects a skipped fea
 - [ ] Is Windows the right primary OS, or should macOS lead?
 - [ ] Should R1 use Next.js, or plain Vite and React? Next adds hydration, which mostly affects cold start.
 - [ ] Is 50,000 items the right default, or should the headline use 10,000?
-- [ ] Should results be published openly from the start, or after Phase 2?
+- [ ] Should results be published openly from the start, or after Phase B?
 - [ ] Is a 20 ms p95 gap the right bar for "refutes", or should it scale with refresh rate?
 
 ## Prior art and references
