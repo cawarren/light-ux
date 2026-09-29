@@ -174,7 +174,7 @@ Four machines cover the questions that matter: a fast desktop, a second OS, the 
 
 | Phase | Builds | Measures with | Hardware | Gate at the end |
 | --- | --- | --- | --- | --- |
-| **A. Web ladder, software only** (~2 weeks) | Dataset and reference ranking; R1, R2, R3 (R4 optional) in Chrome; a playground with blind comparison | Chrome `EventLatency` traces and the Event Timing API, driven by real OS-level input (`uinput`) on the reference laptop; blind ABX trials; 240 fps phone video for spot checks | None | **Gate A:** is the R1→R3 gap large (≥3× or several frames at p95), and can a person tell rungs apart blind more often than chance? |
+| **A. Web ladder, software only** (~2 weeks) | Dataset and reference ranking; R1, R2, R3 (R4 optional) in Chrome; a playground with blind comparison Real OS-level keystrokes (`uinput`) timestamped by the harness, to the on-screen time of the frame where the marker flipped (Element Timing presentation time on the marker; trace fallback). Chrome traces only for the per-stage breakdown. Blind comparison trials; 240 fps phone video for spot checks | None | **Gate A:** is the R1→R3 gap large (≥3× or several frames at p95), and can a person tell rungs apart blind more often than chance? |
 | **B. Cross the browser boundary** (~2–3 weeks) | R5 native (and R4 if not built in A) | A minimal photodiode rig: Teensy and one sensor, simple edge detection, no calibration suite, camera or isolation | ~$40 | **Gate B:** is the browser tax (R4→R5) large enough to warrant frame-level attribution? |
 | **C. Rigorous and publishable** (~4–6 weeks) | R6; full parity suite; agent optimization loop | The full rig, calibration and validation camera scoped in docs/phase-0 (reports 01–04, 06, 07); several machines; two-day reproducibility | Full rig, camera | Publish results, rig design and raw data |
 | **D. Extensions** | Library extraction, local-first rung, sample app, other browsers, dataset size sweep | As in C | — | — |
@@ -187,7 +187,8 @@ Four machines cover the questions that matter: a fast desktop, a second OS, the 
 
 - [ ] Dataset generator and reference ranker (TS and Rust), with golden files
 - [ ] R1 (stock shadcn Command), R2 and R3, each drawing the marker in the same frame as the list
-- [ ] Software harness: pinned Chrome, `uinput` keystrokes, trace and Event Timing collection, correctness checks, p50/p95/p99 report with per-stage breakdown
+- [ ] Software harness: pinned Chrome, harness-timestamped `uinput` keystrokes, on-screen time of each marker flip, correctness checks, p50/p95/p99 report, and a per-stage breakdown from separate traced sessions
+- [ ] Half-day check on the laptop of the harness's unconfirmed assumptions (task A1 in docs/phase-a)
 - [ ] Playground with blind ABX mode and an adjustable added-latency control, to calibrate what differences are perceptible
 - [ ] Phone slow-motion spot check against the software numbers
 - [ ] Gate A review
