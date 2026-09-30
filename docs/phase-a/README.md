@@ -342,6 +342,8 @@ Rationale:
 
 ### 4.2 Chrome launch
 
+> *Decided 2026-09-30:* pin current Chrome stable, **version 145 or later**, the first with `presentationTime` on Element Timing. Chromium 141 (used in the dev container) reports only `renderTime`.
+
 - **Binary:** Chrome for Testing at a pinned version, or policy-frozen Chrome stable (D-B 12). Record the version, the full command line (read from `chrome://version` in a P session) and `chrome://gpu` in the manifest.
 - **Launch Chrome ourselves**, never with Playwright's `launch()`, which adds automation flags and on root adds `--no-sandbox` (05 §4). Allowed flags:
   - `--user-data-dir=<fresh tmp>`, a new profile per block
@@ -386,7 +388,7 @@ Rationale:
 **Scenario A (keyboard)**, per block:
 
 - **A.first_key.** An isolated keystroke into an empty palette. The trial is key-down, then wait for settle, then Backspace (itself recorded as trial `A.clear`), then settle, then the U[50, 250] ms gap. About 60% of trials. This is the headline candidate (D-C 30).
-- **A.seq.** A 20-character query from report 05's **rig-typeable subset** (lower-case ASCII, digits, space; US layout), typed at U[90, 117] ms, then 20 backspaces at the same cadence. Every key is a trial row, with `seq_pos` 0..39. Queued input is kept.
+- **A.seq.** A 20-character query from report 05's **rig-typeable subset** (lower-case ASCII, digits, space; US layout), typed at U[90, 117] ms, then 20 backspaces at the same cadence. Every key is a trial row, with `seq_pos` 0..39. Queued input is kept. *Correctness (decided 2026-09-30):* for R1, forward keys are checked tie-insensitively and backspace keys by result set only (stock cmdk mis-orders re-appearing items; recorded as an R1 finding). R2 and above are checked strictly on every key.
 - **Optional C.scroll.** 10 s of `REL_WHEEL` / `REL_WHEEL_HI_RES` from a second uinput device, a pointer. Dropped or late frames are counted from the T-session trace (`chrome_event_latencies` for `GESTURE_SCROLL_UPDATE` plus the stdlib scroll-jank modules) and from probe rAF gaps. Informative only in Phase A.
 - **Warm-up and counts:**
   - 50 warm-up trials, then 500 measured trials per rung × scenario × refresh rate (spec). 1,000 if p99 is quoted (D-C 31).

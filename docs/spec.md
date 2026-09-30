@@ -85,7 +85,7 @@ A rung that fails any check is still measured but reported as non-parity, so it 
 | Scaling | Crisp at 100%, 150% and 200% OS scaling; browser zoom works on web rungs | Screenshot inspection |
 | Theming | Light and dark modes; respects reduced motion and increased contrast | Screenshot diff |
 | Visual fidelity | Perceptual diff against R1 below an agreed threshold | Automated diff |
-| Correct results | Identical ranked results to the reference on 1,000 held-out queries | Automated comparison |
+| Correct results | Identical ranked results to the reference on 1,000 held-out queries. R1 only: tie order may differ, and after a backspace only the result set must match, because stock cmdk does not re-sort re-appearing items (a recorded finding) | Automated comparison |
 | Tear-free | No tearing visible in high-speed capture (R6 may test tearing as a variant) | 1,000 fps camera |
 | Marker honesty | Marker and list change in the same frame | 1,000 fps camera |
 | Sandbox | Web rungs run with default browser security; no flags that weaken it | Launch config review |

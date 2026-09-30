@@ -62,7 +62,9 @@ the order is wrong beyond ties (for example an item scored 0.151 above one score
 clearing the query the list is not in dataset order. The typed spec records these steps and fails
 on them only with `LADDER_STRICT_BACKSPACE=1`. Phase-a §4.5 compares every A.seq trial
 (including the 20 backspaces) tie-insensitively for R1, so as specified R1 would log
-`wrong_result` on most backspace trials and be non-parity. That needs an owner decision.
+`wrong_result` on most backspace trials and be non-parity.
+
+**Decided 2026-09-30:** R1's correctness check covers fresh-mount (pasted) queries, strictly, and forward typing, tie-insensitively. On backspace steps R1 must return the right result **set**; the order bug is recorded as a known R1 finding, not a parity failure, because it is what stock shadcn/cmdk ships and R1 is never optimized. R2 and above must match the reference strictly on every step, backspace included.
 
 **Rough headless timings** (`npm run test:timing`, 1 worker, software rendering, CDP input: context
 only, never a result). ms from the `input` event's `timeStamp`:

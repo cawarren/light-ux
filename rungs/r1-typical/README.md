@@ -31,7 +31,7 @@ Created with the stock tools, then only the palette page was written:
 
 1. `npx create-next-app@16.3.7 r1-typical --ts --tailwind --eslint --app --import-alias "@/*" --use-npm --disable-git --yes`
    (all defaults: TypeScript, Tailwind v4, ESLint, App Router, Turbopack, no `src/`, `AGENTS.md`).
-2. `npx shadcn@4.21.0 init --defaults` (style `base-nova`, the CLI's current default; Base UI,
+2. `npx shadcn@4.21.0 init --defaults` (style `base-nova`, the CLI's current default, kept deliberately because it is what a typical team gets today (decided 2026-09-30); Base UI,
    neutral, CSS variables, lucide) and `npx shadcn@4.21.0 add command`. `components/ui/*` are the
    CLI's output, **unmodified** (the current registry imports `cn` from shadcn's `cn` package).
 3. `cmdk` pinned to **1.1.1** (`--save-exact`), the version the reference ranker vendors.
