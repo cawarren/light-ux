@@ -189,13 +189,13 @@ Four machines cover the questions that matter: a fast desktop, a second OS, the 
 
 **Hardware decisions carried forward.** The rig research done before the rephasing is summarized in docs/hardware-notes.md, so Phases B and C start from it.
 
-**Phase A checklist** (detail in docs/phase-a/README.md)
+**Phase A checklist** (detail in docs/phase-a/README.md; the owner's steps are in docs/phase-a/RUNBOOK.md)
 
-- [ ] Dataset generator and reference ranker (TS and Rust), with golden files
-- [ ] R1 (stock shadcn Command), R2 and R3, each drawing the marker in the same frame as the list
-- [ ] Software harness: pinned Chrome, harness-timestamped `uinput` keystrokes, on-screen time of each marker flip, correctness checks, p50/p95/p99 report, and a per-stage breakdown from separate traced sessions
+- [x] Dataset generator and reference ranker (TS and Rust), with golden files
+- [x] R1 (stock shadcn Command), R2 and R3, each drawing the marker in the same frame as the list
+- [x] Software harness (built; awaiting a real session): pinned Chrome, harness-timestamped `uinput` keystrokes, on-screen time of each marker flip, correctness checks, p50/p95/p99 report, and a per-stage breakdown from separate traced sessions
 - [ ] Half-day check on the laptop of the harness's unconfirmed assumptions (task A1 in docs/phase-a)
-- [ ] Playground with blind ABX mode and an adjustable added-latency control, to calibrate what differences are perceptible
+- [x] Playground (built) with blind 2AFC mode and an adjustable added-latency control, to calibrate what differences are perceptible
 - [ ] Phone slow-motion spot check against the software numbers
 - [ ] Performance Olympics on R2 and R3 (docs/olympics.md)
 - [ ] Gate A review
