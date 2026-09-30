@@ -365,6 +365,8 @@ Rationale:
 
 ### 4.4 Latency marker (rig-ready now)
 
+> **Found while building the A1 check (2026-09-30, headless Chromium 141):** an inline `<span elementtiming>` never produces an Element Timing entry; `display: inline-block` or `block` does, every time. A same-colour (invisible) glyph still reports. Changing the text of a reused element reports only once, so insert a **new** element per flip. The A1 check re-tests this on the owner's Chrome.
+
 - The **harness-owned marker component** comes in variants: React (for R1/R2, reading cmdk's store as in 05 §3.3), vanilla (R3), and a canvas draw call (R4).
 - It uses a **fixed device-pixel rectangle** from `marker.json`: near the top-left, **128 device px** on the X1 (README S3; 06 §1). It is pure `#000`/`#fff`, with no transition.
 - It must be written **in the same JS task as, and after, the last list DOM mutation** for that query (05 §3.3 rule). For canvas it goes in the same draw submission.

@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A1 check</title>
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; background: #1c1c1c; color: #eee; font: 16px/1.45 system-ui, sans-serif; }
+  /* Latency marker: fixed near the top-left, pure black/white, no transition (phase-a §4.4). */
+  #marker { position: fixed; left: 0; top: 0; width: 64px; height: 64px; background: #000;
+            overflow: hidden; font-size: 12px; line-height: 12px; }
+  /* The probe span must NOT be plain inline: Chrome attributes text paint to the
+     containing block, so an inline <span elementtiming> never gets an entry
+     (found in the dev container on Chromium 141; variant D re-checks it). */
+  #marker span { display: inline-block; }
+  main { margin-left: 96px; padding: 20px 24px; max-width: 760px; }
+  #status { font-size: 30px; font-weight: 700; margin: 8px 0 4px; }
+  #detail { color: #bbb; min-height: 3em; white-space: pre-line; }
+  #focus { display: inline-block; margin: 12px 0; padding: 4px 10px; border-radius: 6px; font-weight: 600; }
+  #focus.yes { background: #174d24; } #focus.no { background: #6b1b1b; }
+  input { width: 100%; box-sizing: border-box; font: 18px ui-monospace, monospace; padding: 8px;
+          background: #111; color: #eee; border: 1px solid #555; }
+  .warn { color: #ffcf6b; }
+</style>
+</head>
+<body>
+<div id="marker"></div>
+<main>
+  <div id="status">Starting…</div>
+  <div id="detail">Waiting for the check script.</div>
+  <div id="focus" class="no">window not focused</div>
+  <input id="field" autocomplete="off" spellcheck="false" placeholder="injected keys land here">
+  <p class="warn">During the check: keep this window in front, do not touch the keyboard or mouse.</p>
+</main>
+<script>
+'use strict';
+const $ = (id) => document.getElementById(id);
+const now = () => performance.now();
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// ---------------------------------------------------------------- frame log
+// Every rAF: [frame index, rAF timestamp (frame begin), time the callback ran].
+// Flips made since the previous rAF get their frame stamped here, plus a
+// "post-frame" time from a MessageChannel message posted in the rAF (runs just
+// after the frame's rendering update on the main thread; phase-a §1.1).
+let frame = 0;
+const rafLog = [];
+let pendingFlips = [];
+const postQueue = [];
+const mc = new MessageChannel();
+mc.port1.onmessage = () => { const t = now(); for (const f of postQueue.shift() || []) f.post_raf = t; };
+function onFrame(ts) {
+  frame++;
+  const cb = now();
+  rafLog.push([frame, ts, cb]);
+  if (pendingFlips.length) {
+    const fl = pendingFlips; pendingFlips = [];
+    for (const f of fl) { f.raf_frame = frame; f.raf_ts = ts; f.raf_cb = cb; }
+    postQueue.push(fl); mc.port2.postMessage(0);
+  }
+  requestAnimationFrame(onFrame);
+}
+requestAnimationFrame(onFrame);
+const rafSince = (t) => rafLog.filter((r) => r[2] >= t);
+
+// ---------------------------------------------------------------- observers
+const ENTRY_FIELDS = ['name', 'entryType', 'startTime', 'duration', 'renderTime', 'loadTime',
+  'paintTime', 'presentationTime', 'identifier', 'id', 'processingStart', 'processingEnd',
+  'interactionId', 'cancelable'];
+function pick(e, observedAt) {
+  const o = { observed_at: observedAt };
+  for (const k of ENTRY_FIELDS) if (k in e) o[k] = e[k];
+  return o;
+}
+function instanceKeys(e) { const ks = []; for (const k in e) if (typeof e[k] !== 'function') ks.push(k); return ks; }
+const elEntries = [], evEntries = [];
+const fields = { element: null, event: null };
+const observerErrors = {};
+function observe(type, sink, extra) {
+  try {
+    new PerformanceObserver((list) => {
+      const t = now();
+      for (const e of list.getEntries()) {
+        if (!fields[type === 'first-input' ? 'event' : type]) fields[type === 'first-input' ? 'event' : type] = instanceKeys(e);
+        sink.push(pick(e, t));
+      }
+    }).observe(Object.assign({ type, buffered: true }, extra || {}));
+  } catch (err) { observerErrors[type] = String(err); }
+}
+observe('element', elEntries);
+observe('event', evEntries, { durationThreshold: 16 });  // 16 ms is the minimum threshold
+observe('first-input', evEntries);
+
+// ---------------------------------------------------------------- marker
+// variant A: new <span elementtiming> per flip, glyph visible (contrasting colour)
+// variant B: one reused <span elementtiming>, only its text changes per flip
+// variant C: new span per flip, glyph in the marker's own colour (the planned
+//            photodiode-friendly design, phase-a §4.4 [verify])
+// variant D: like A but the span is plain display:inline (expected: no entries)
+const marker = $('marker');
+let markerBlack = true, reuseSpan = null;
+function flip(id, variant) {
+  markerBlack = !markerBlack;
+  const bg = markerBlack ? '#000' : '#fff', fg = markerBlack ? '#fff' : '#000';
+  marker.style.background = bg;
+  if (variant === 'B') {
+    if (!reuseSpan) { reuseSpan = document.createElement('span'); reuseSpan.setAttribute('elementtiming', 'et-B-reuse'); }
+    if (reuseSpan.parentNode !== marker) marker.replaceChildren(reuseSpan);
+    reuseSpan.textContent = '▮' + id.slice(-3);
+    reuseSpan.style.color = fg;
+  } else {
+    const s = document.createElement('span');
+    s.setAttribute('elementtiming', id);
+    s.textContent = '▮';
+    s.style.color = variant === 'C' ? bg : fg;
+    if (variant === 'D') s.style.display = 'inline';
+    marker.replaceChildren(s);
+  }
+  const rec = { id, variant, t_flip: now(), frame_at_flip: frame };
+  pendingFlips.push(rec);
+  return rec;
+}
+
+// ---------------------------------------------------------------- input block
+let armed = false;
+const keys = [], keyups = [];
+addEventListener('keydown', (e) => {
+  if (!armed) return;
+  const tH = now();
+  const i = keys.length;
+  const rec = { i, ts: e.timeStamp, t_handler: tH, code: e.code, key: e.key, repeat: e.repeat,
+                trusted: e.isTrusted, frame };
+  if (!e.repeat) rec.flip = flip('k-' + i, 'A');
+  // Every 5th key: hold the main thread 20 ms so an Event Timing entry
+  // (duration >= 16 ms) is emitted for it. These keys are excluded from the floor.
+  if (i % 5 === 4) { while (now() - tH < 20) { /* busy */ } rec.busy_ms = 20; }
+  rec.t_handler_end = now();
+  keys.push(rec);
+}, { capture: true });
+addEventListener('keyup', (e) => {
+  if (armed) keyups.push({ ts: e.timeStamp, t_handler: now(), code: e.code });
+}, { capture: true });
+
+// ---------------------------------------------------------------- focus UI
+function focusUi() {
+  const f = document.hasFocus();
+  $('focus').className = f ? 'yes' : 'no';
+  $('focus').textContent = f ? 'window focused' : 'window NOT focused - click inside this page';
+  return f;
+}
+addEventListener('focus', focusUi);
+addEventListener('blur', () => {
+  focusUi();
+  if (armed) fetch('/focus', { method: 'POST', body: JSON.stringify({ focused: false, reason: 'blur' }), keepalive: true }).catch(() => {});
+});
+document.addEventListener('visibilitychange', focusUi);
+document.addEventListener('click', () => $('field').focus());
+setInterval(focusUi, 500);
+
+function show({ title, text }) {
+  if (title != null) $('status').textContent = title;
+  if (text != null) $('detail').textContent = text;
+  return { ok: true };
+}
+
+// ---------------------------------------------------------------- ops
+function protoNames(C) {
+  if (!C) return null;
+  const out = []; let p = C.prototype;
+  while (p && p !== Object.prototype) {
+    for (const k of Object.getOwnPropertyNames(p)) if (k !== 'constructor') out.push(k);
+    p = Object.getPrototypeOf(p);
+  }
+  return out;
+}
+
+const OPS = {
+  noop: async () => null,
+  show: async (a) => show(a),
+  focus_state: async () => ({ hasFocus: focusUi(), visibility: document.visibilityState,
+                              activeIsField: document.activeElement === $('field') }),
+
+  env: async () => {
+    const o = {
+      crossOriginIsolated: self.crossOriginIsolated, isSecureContext: self.isSecureContext,
+      ua: navigator.userAgent, dpr: devicePixelRatio,
+      screen: { w: screen.width, h: screen.height, availW: screen.availWidth, availH: screen.availHeight,
+                colorDepth: screen.colorDepth },
+      inner: { w: innerWidth, h: innerHeight }, timeOrigin: performance.timeOrigin,
+      hardwareConcurrency: navigator.hardwareConcurrency,
+      supportedEntryTypes: PerformanceObserver.supportedEntryTypes,
+      proto: { PerformanceEventTiming: protoNames(self.PerformanceEventTiming),
+               PerformanceElementTiming: protoNames(self.PerformanceElementTiming),
+               PerformancePaintTiming: protoNames(self.PerformancePaintTiming),
+               PerformanceLongAnimationFrameTiming: protoNames(self.PerformanceLongAnimationFrameTiming) },
+      observerErrors,
+    };
+    if (navigator.userAgentData) {
+      try {
+        o.uaData = await navigator.userAgentData.getHighEntropyValues(
+          ['platform', 'platformVersion', 'architecture', 'model', 'fullVersionList', 'bitness']);
+      } catch (err) { o.uaDataError = String(err); }
+    }
+    return o;
+  },
+
+  // performance.now() granularity: spin 50 ms, record every change.
+  timer: async () => {
+    const deltas = [], samples = [];
+    let last = now(); const end = last + 50;
+    for (;;) {
+      const t = now();
+      if (t !== last) { deltas.push(t - last); if (samples.length < 400) samples.push(t); last = t; }
+      if (t > end) break;
+    }
+    deltas.sort((a, b) => a - b);
+    return { n: deltas.length, min: deltas[0], p50: deltas[deltas.length >> 1], samples };
+  },
+
+  raf: async ({ ms = 2000 }) => { const t0 = now(); await sleep(ms); return { raf: rafSince(t0) }; },
+
+  // NTP-style exchange with the server (phase-a §3.4), over a WebSocket.
+  // Sample: [t0 page ms, t1 server recv ns, t2 server send ns, t3 page ms].
+  // Falls back to fetch (t1 = t2) if the WebSocket cannot open.
+  sync: async ({ n = 40 }) => {
+    const out = [];
+    let ws = null;
+    try {
+      ws = new WebSocket(`ws://${location.host}/ws`);
+      await new Promise((res, rej) => { ws.onopen = res; ws.onerror = rej; setTimeout(rej, 3000); });
+    } catch (err) { ws = null; }
+    for (let i = 0; i < n; i++) {
+      let t0, t3, j;
+      if (ws) {
+        const reply = new Promise((res) => { ws.onmessage = (m) => { t3 = now(); res(m.data); }; });
+        t0 = now(); ws.send('s');
+        j = JSON.parse(await reply);
+      } else {
+        t0 = now();
+        const r = await fetch('/sync', { method: 'POST', body: '', cache: 'no-store' });
+        const k = await r.json(); t3 = now(); j = { t1: k.t_ns, t2: k.t_ns };
+      }
+      out.push([t0, j.t1, j.t2, t3]);
+      await sleep(5);
+    }
+    if (ws) ws.close();
+    return { samples: out, transport: ws ? 'websocket' : 'fetch' };
+  },
+
+  // Element Timing without input: flips at random 80-150 ms intervals.
+  et_test: async ({ per_variant = 30 }) => {
+    const t0 = now(), flips = [];
+    for (const v of ['A', 'B', 'C', 'D']) {
+      for (let i = 0; i < per_variant; i++) {
+        await sleep(80 + Math.random() * 70);
+        flips.push(flip(`et-${v}-${i}`, v));
+      }
+    }
+    await sleep(1200);
+    return { flips, entries: elEntries.filter((e) => (e.identifier || '').startsWith('et-')),
+             raf: rafSince(t0 - 50), fields: fields.element };
+  },
+
+  arm: async () => {
+    keys.length = 0; keyups.length = 0;
+    $('field').value = '';
+    $('field').focus();
+    armed = true;
+    return { hasFocus: document.hasFocus(), activeIsField: document.activeElement === $('field'),
+             t_armed: now(), interactionCount: performance.interactionCount };
+  },
+
+  countdown: async ({ seconds = 3 }) => {
+    for (let s = seconds; s > 0; s--) { show({ title: `Hands off - typing starts in ${s}…` }); await sleep(1000); }
+    show({ title: 'Typing… hands off', text: 'Injected keys are being typed into the box below.' });
+    return { ok: true };
+  },
+
+  collect: async ({ t_from }) => {
+    armed = false;
+    await sleep(1200);   // let late Element/Event Timing entries arrive
+    return {
+      keys, keyups,
+      entries: elEntries.filter((e) => (e.identifier || '').startsWith('k-')),
+      events: evEntries.filter((e) => e.startTime >= (t_from || 0) - 1),
+      raf: rafSince((t_from || 0) - 50),
+      fields_element: fields.element, fields_event: fields.event,
+      interactionCount: performance.interactionCount,
+      field_length: $('field').value.length,
+    };
+  },
+};
+
+// ---------------------------------------------------------------- command loop
+async function cmdLoop() {
+  for (;;) {
+    let c;
+    try { c = await (await fetch('/cmd', { cache: 'no-store' })).json(); }
+    catch (err) { $('detail').textContent = 'Lost the check script (' + err + ').'; await sleep(1000); continue; }
+    if (!c || c.op === 'noop') continue;
+    let result;
+    try { result = await OPS[c.op](c.args || {}); }
+    catch (err) { result = { __error: String(err) + '\n' + (err && err.stack) }; }
+    try { await fetch('/result', { method: 'POST', body: JSON.stringify({ id: c.id, op: c.op, result }) }); }
+    catch (err) { /* script gone */ }
+  }
+}
+show({ title: 'Connected', text: 'The check script is driving this page.' });
+focusUi();
+cmdLoop();
+</script>
+</body>
+</html>
