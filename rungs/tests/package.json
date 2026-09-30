@@ -1,0 +1,23 @@
+{
+  "name": "@latency-ladder/rung-tests",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Playwright parity checks for the web rungs (R1 Next and R1 Vite): isolation, correctness vs ranker-ts, marker honesty, selection, rough headless timings.",
+  "engines": { "node": ">=22 <23" },
+  "scripts": {
+    "install:rungs": "npm --prefix ../r1-typical ci && npm --prefix ../r1-vite ci",
+    "prepare:data": "node ../scripts/prepare.mjs",
+    "build:rungs": "node ../scripts/prepare.mjs && npm --prefix ../r1-typical run build && npm --prefix ../r1-vite run build",
+    "check-sync": "node ../scripts/check-sync.mjs",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "node ../scripts/check-sync.mjs && playwright test --grep-invert @timing",
+    "test:quick": "LADDER_QUERIES=10 LADDER_TYPED_10K=2 LADDER_TYPED_50K=0 playwright test --grep-invert @timing",
+    "test:timing": "playwright test --grep @timing --workers=1"
+  },
+  "devDependencies": {
+    "@latency-ladder/ranker-ts": "*",
+    "@playwright/test": "1.56.1",
+    "@types/node": "^22.0.0"
+  }
+}

@@ -2,5 +2,5 @@
   "name": "latency-ladder",
   "private": true,
   "engines": { "node": ">=22 <23" },
-  "workspaces": ["dataset", "parity/ranker-ts"]
+  "workspaces": ["dataset", "parity/ranker-ts", "rungs/tests"]
 }
