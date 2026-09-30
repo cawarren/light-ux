@@ -1,0 +1,61 @@
+:root {
+  --bg: #f7f7f5; --fg: #1c1c1a; --muted: #6b6b66; --line: #e2e2dd; --card: #ffffff;
+  --accent: #3b5bdb; --accent-soft: #e7ecfd; --warn: #b45309;
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #151515; --fg: #e8e8e4; --muted: #9a9a94; --line: #2c2c2a; --card: #1d1d1c;
+    --accent: #8ea4f5; --accent-soft: #232a45; --warn: #f59e0b; }
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { background: var(--bg); color: var(--fg); display: flex; flex-direction: column; overflow: hidden; }
+[hidden] { display: none !important; }
+kbd { font: 12px/1 ui-monospace, SFMono-Regular, Menlo, monospace; padding: 2px 6px; border: 1px solid var(--line);
+  border-bottom-width: 2px; border-radius: 5px; background: var(--card); color: var(--fg); }
+#bar { display: flex; align-items: center; gap: 14px; padding: 8px 16px; border-bottom: 1px solid var(--line);
+  min-height: 42px; font-size: 13px; color: var(--muted); flex: none; }
+#bar-title { color: var(--fg); font-weight: 600; }
+#bar-hint { margin-left: auto; }
+#bar-progress { width: 180px; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+#bar-progress-fill { display: block; height: 100%; width: 0; background: var(--accent); }
+#prompt { flex: none; padding: 10px 16px; border-bottom: 1px solid var(--line); font-size: 16px; text-align: center; }
+#prompt b { font: 600 18px/1 ui-monospace, SFMono-Regular, Menlo, monospace; padding: 3px 8px; border-radius: 6px;
+  background: var(--accent-soft); letter-spacing: .04em; }
+#main { flex: 1; display: flex; min-height: 0; }
+.screen { flex: 1; overflow: auto; padding: 48px 16px; }
+.card { max-width: 640px; margin: 0 auto; }
+.card h1 { font-size: 22px; font-weight: 600; margin: 0 0 6px; }
+.card h2 { font-size: 15px; font-weight: 600; margin: 28px 0 8px; }
+.card p { margin: 6px 0; color: var(--muted); }
+.menu { list-style: none; padding: 0; margin: 16px 0 0; }
+.menu li { display: flex; gap: 14px; align-items: baseline; padding: 12px 14px; border: 1px solid var(--line);
+  border-radius: 10px; background: var(--card); margin-bottom: 8px; cursor: pointer; }
+.menu li:hover { border-color: var(--accent); }
+.menu li .d { color: var(--muted); font-size: 13px; }
+.warn { color: var(--warn) !important; }
+#stage-wrap { flex: 1; position: relative; min-width: 0; }
+#stage { width: 100%; height: 100%; border: 0; display: block; background: var(--bg); }
+#overlay { position: absolute; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; }
+#overlay:focus { outline: none; }
+#overlay-box { text-align: center; max-width: 560px; padding: 16px; }
+#overlay-box .big { font-size: 26px; font-weight: 600; margin-bottom: 10px; }
+#overlay-box .sub { color: var(--muted); }
+#overlay-box .choices { display: flex; gap: 16px; justify-content: center; margin: 22px 0 8px; }
+#overlay-box .choice { min-width: 140px; padding: 18px 14px; border: 1px solid var(--line); border-radius: 12px;
+  background: var(--card); cursor: pointer; }
+#overlay-box .choice.sel { border-color: var(--accent); background: var(--accent-soft); }
+#overlay-box .choice kbd { font-size: 15px; }
+.ready-bar { width: 280px; height: 4px; margin: 20px auto 0; background: var(--line); border-radius: 2px; overflow: hidden; }
+.ready-bar i { display: block; height: 100%; width: 0; background: var(--muted); }
+#hud { width: 280px; flex: none; border-left: 1px solid var(--line); padding: 14px 16px; overflow: auto; font-size: 13px; }
+#hud h3 { font-size: 13px; margin: 0 0 8px; }
+#hud .row { display: flex; justify-content: space-between; gap: 8px; }
+#hud .lat { font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; }
+#hud .note { color: var(--muted); margin-top: 12px; }
+#hud select { width: 100%; margin: 2px 0 10px; font: inherit; color: var(--fg); background: var(--card);
+  border: 1px solid var(--line); border-radius: 6px; padding: 4px; }
+@media (max-width: 760px) { #main { flex-direction: column; } #hud { width: auto; border-left: 0; border-top: 1px solid var(--line); max-height: 40vh; } }
+#prompt .hint { color: var(--muted); font-size: 13px; }
+#prompt .hint.flash { animation: flash 1.2s ease-out; }
+@keyframes flash { 0%, 40% { color: var(--warn); } 100% { color: var(--muted); } }

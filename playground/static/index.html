@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Playground</title>
+  <link rel="icon" href="/__play/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/__play/app.css">
+  <script src="/__play/app.js" defer></script>
+</head>
+<body>
+  <header id="bar">
+    <span id="bar-title">Playground</span>
+    <span id="bar-mode"></span>
+    <span id="bar-progress" hidden><span id="bar-progress-fill"></span></span>
+    <span id="bar-count"></span>
+    <span id="bar-hint"></span>
+  </header>
+  <div id="prompt" hidden></div>
+  <main id="main">
+    <section id="home" class="screen" hidden></section>
+    <div id="stage-wrap" hidden>
+      <iframe id="stage" title="Palette" allow="cross-origin-isolated"></iframe>
+      <div id="overlay" hidden><div id="overlay-box"></div></div>
+    </div>
+    <aside id="hud" hidden></aside>
+  </main>
+</body>
+</html>
