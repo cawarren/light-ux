@@ -22,7 +22,9 @@ for (const size of Object.keys(SIZES) as (keyof typeof SIZES)[]) {
         expect(selected).toBe(ref.selected);
         // (c) one flip, same frame as the list, marker last; its top-50 matches the reference.
         expectHonestFlip(c, q);
-        expect(c.flip.top50).toEqual(ref.ids.slice(0, 50).map((id) => items[id]));
+        // The flip snapshot reads rendered rows, so a virtualized rung may show fewer than 50; they must be the start of the ranking.
+        expect(c.flip.top50.length, 'flip snapshot has rows when there are results').toBe(ref.ids.length ? Math.max(1, c.flip.top50.length) : 0);
+        expect(c.flip.top50).toEqual(ref.ids.slice(0, c.flip.top50.length).map((id) => items[id]));
         expect(c.flip.count).toBe(ref.ids.length);
         test.info().annotations.push({ type: 'result', description: JSON.stringify({ size, qid, count: ref.ids.length, fillMs: c.wallMs }) });
       });

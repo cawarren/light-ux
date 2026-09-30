@@ -1,0 +1,139 @@
+/* R3 styles: the computed values of R1's shadcn Command (base-nova, Tailwind 4), written by hand.
+   Values were read from R1 (Vite) with getComputedStyle in light and dark mode. */
+@import '@fontsource-variable/geist/index.css';
+
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --popover: oklch(0.205 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+  }
+}
+
+*, ::before, ::after { box-sizing: border-box; margin: 0; padding: 0; border: 0 solid var(--border); }
+html {
+  height: 100%;
+  font-family: 'Geist Variable', sans-serif;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  tab-size: 4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--background);
+  color: var(--foreground);
+}
+.page { display: flex; flex: 1; align-items: flex-start; justify-content: center; padding: 20vh 16px 0; }
+.wrap { width: 100%; max-width: 36rem; }
+
+.command {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 4px;
+  border-width: 1px;
+  border-radius: 14px;
+  background: var(--popover);
+  color: var(--popover-foreground);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.input-wrap { padding: 4px 4px 0; }
+.input-group {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  min-width: 0;
+  border-width: 1px;
+  border-radius: 10px;
+  border-color: color-mix(in oklab, var(--input) 30%, transparent);
+  background: color-mix(in oklab, var(--input) 30%, transparent);
+}
+.search-icon {
+  flex-shrink: 0;
+  box-sizing: content-box;
+  width: 16px;
+  height: 16px;
+  padding: 0 0 0 8px;
+  color: var(--muted-foreground);
+  opacity: 0.5;
+}
+.input-group input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 20px;
+  padding: 0 0 0 6px;
+  font: inherit;
+  font-size: 14px;
+  line-height: 20px;
+  color: inherit;
+  background: transparent;
+  outline: none;
+  appearance: none;
+  border-radius: 0;
+}
+.input-group input::placeholder { color: color-mix(in oklab, currentcolor 50%, transparent); opacity: 1; }
+
+/* The list: fixed geometry, strict containment. Its height is written from the result count
+   (min(count, 9) rows, or the empty message), never measured. */
+.list {
+  position: relative;
+  height: 68px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  outline: none;
+  contain: strict;
+}
+.list::-webkit-scrollbar { display: none; }
+.sizer { position: relative; height: 0; contain: strict; }
+.window { position: absolute; top: 0; left: 0; right: 0; contain: layout style; }
+.item {
+  display: block;
+  height: 32px;
+  padding: 6px 32px 6px 8px; /* R1: px-2, then gap-2 + the 16 px (invisible) check icon */
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: default;
+  user-select: none;
+  contain: strict;
+}
+.item[aria-selected='true'] { background: var(--muted); color: var(--foreground); }
+.empty { padding: 24px 0; font-size: 14px; line-height: 20px; text-align: center; }
+.empty[hidden] { display: none; }
+
+.live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

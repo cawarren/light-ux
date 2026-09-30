@@ -1,0 +1,19 @@
+{
+  "name": "r3-no-framework",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Latency Ladder R3 'No framework': hand-written TypeScript on the DOM, recycled row pool, CSS containment, filtering in a Web Worker.",
+  "engines": { "node": ">=22 <23" },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node build.mjs",
+    "serve": "node serve.mjs",
+    "typecheck": "tsc -p tsconfig.json",
+    "test:scorer": "node --test test/*.test.ts"
+  },
+  "devDependencies": {
+    "@fontsource-variable/geist": "5.3.0",
+    "esbuild": "0.28.2",
+    "typescript": "6.0.3"
+  }
+}

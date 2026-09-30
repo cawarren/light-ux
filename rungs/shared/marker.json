@@ -1,5 +1,5 @@
 {
   "marker": { "x": 16, "y": 16, "size": 128, "units": "viewport_device_px" },
-  "resultSelector": "[cmdk-item]",
+  "resultSelector": "[data-ladder-item], [cmdk-item]",
   "note": "Default for development. The harness owns this file and writes a per-machine rect (docs/phase-0/04-calibration.md §4.2): viewport-relative device px, measured once per machine with the alignment pattern."
 }

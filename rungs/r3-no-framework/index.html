@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>R3 No framework</title>
+    <!-- Harness-owned latency marker + probe (rungs/shared/ladder-probe.js), not rung code. -->
+    <script src="/ladder/probe.js"></script>
+    <link rel="stylesheet" href="/assets/app.css" />
+    <script type="module" src="/assets/main.js"></script>
+  </head>
+  <body>
+    <main class="page">
+      <div class="wrap">
+        <div class="command">
+          <div class="input-wrap">
+            <div class="input-group">
+              <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
+              <input data-ladder-input type="text" placeholder="Type a command or search..." autofocus
+                autocomplete="off" autocorrect="off" spellcheck="false"
+                role="combobox" aria-expanded="true" aria-controls="r3-list" aria-autocomplete="list" aria-label="Search commands" />
+            </div>
+          </div>
+          <div class="list" id="r3-list" data-ladder-list role="listbox" aria-label="Suggestions" tabindex="-1">
+            <div class="sizer"><div class="window"></div></div>
+            <div class="empty" role="presentation">No results found.</div>
+          </div>
+          <div class="live" role="status" aria-live="polite" aria-atomic="true"></div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

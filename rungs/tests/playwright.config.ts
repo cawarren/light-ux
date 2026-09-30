@@ -13,12 +13,15 @@ const NEXT_PORT = Number(process.env.LADDER_NEXT_PORT ?? 3101);
 const VITE_PORT = Number(process.env.LADDER_VITE_PORT ?? 3102);
 
 // R2+ rungs follow rungs/shared/CONTRACT.md: `npm run serve -- --port N` serves the production build
-// with COOP/COEP. They join the suite automatically once their package.json exists.
+// with COOP/COEP. They join the suite automatically once their package.json has a `serve` script.
 // Run one rung with Playwright's --project flag, e.g. `npm test -- --project r2-diligent`.
 const EXTRA = [
   { name: 'r2-diligent', port: Number(process.env.LADDER_R2_PORT ?? 3103) },
   { name: 'r3-no-framework', port: Number(process.env.LADDER_R3_PORT ?? 3104) },
-].filter((r) => fs.existsSync(path.resolve(import.meta.dirname, '..', r.name, 'package.json')));
+].filter((r) => {
+  const pkg = path.resolve(import.meta.dirname, '..', r.name, 'package.json');
+  return fs.existsSync(pkg) && Boolean(JSON.parse(fs.readFileSync(pkg, 'utf8')).scripts?.serve);
+});
 
 export default defineConfig({
   testDir: './specs',
