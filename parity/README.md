@@ -132,6 +132,8 @@ cargo build --release --lib --no-default-features --target wasm32-unknown-unknow
 | browser oracle: real `<Command>` in Chromium, fresh mount, one `fill()`, 5k clean items | **100 / 100 strict** (94 non-empty lists, 118,791 ids compared) |
 | conform self-test (tie-shuffled candidate) | strict: 63 FAIL. tie-insensitive: 70 PASS, 1 SKIP. A cross-group swap gives FAIL `tie-set` |
 
+**On the real dev-1 dataset** (50k items × 1,000 shared queries, 2026-09-30): `ranker-ts` and `ladder-rank` golden files are **byte-identical** (0 differing queries). Rust takes 9 s for all 1,000 queries; TS takes 2 min 38 s.
+
 ## Benchmark (50k-item fixture, 70 queries × 3 repeats, 4-vCPU Xeon @ 2.8 GHz, single thread)
 
 | Implementation | mean | p50 | p95 | max |

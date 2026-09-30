@@ -23,7 +23,8 @@ default = ["cli"]
 cli = ["dep:serde_json", "dep:sha2"]
 
 [dependencies]
-serde_json = { version = "1", optional = true }
+# preserve_order: golden JSON keys in the same order as ranker-ts, so the files are byte-identical
+serde_json = { version = "1", optional = true, features = ["preserve_order"] }
 sha2 = { version = "0.10", optional = true }
 
 [build-dependencies]
