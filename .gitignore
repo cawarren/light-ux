@@ -1,3 +1,5 @@
 node_modules/
 target/
 docs/phase-0/spikes/fixture.json
+dist/
+*.tsbuildinfo
