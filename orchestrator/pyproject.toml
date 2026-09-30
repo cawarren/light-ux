@@ -1,0 +1,24 @@
+[project]
+name = "ladder"
+version = "0.1.0"
+description = "Latency Ladder orchestrator: Phase A software measurement harness (`ladder soft`)"
+readme = "README.md"
+requires-python = ">=3.9"
+# The runner (ladder/soft/runner, timing, manifest) and the analysis/report are standard
+# library only, so `python3 -m ladder ...` works on a bare system Python (macOS 3.9 included).
+dependencies = []
+
+[project.optional-dependencies]
+parquet = ["pyarrow>=15"]          # derived/trials.parquet next to trials.csv
+trace = ["perfetto>=0.11"]         # `ladder soft stages` (T sessions, trace_processor)
+
+[project.scripts]
+ladder = "ladder.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["ladder"]
+
