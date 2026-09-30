@@ -1,0 +1,48 @@
+# Arabic (ar). Format: phrase<TAB>English gloss. NFC, no tashkeel, no presentation forms (lam-alef is the plain letter pair). PENDING NATIVE-SPEAKER REVIEW.
+فتح ملف	Open File
+حفظ الملف	Save File
+حفظ باسم	Save As
+نافذة جديدة	New Window
+إغلاق النافذة	Close Window
+فتح الإعدادات	Open Settings
+الإعدادات	Settings
+بحث	Search
+استبدال	Replace
+استبدال الكل	Replace All
+تراجع	Undo
+إعادة	Redo
+قص	Cut
+نسخ	Copy
+لصق	Paste
+تحديد الكل	Select All
+عرض	View
+تحرير	Edit
+مساعدة	Help
+فتح الطرفية	Open Terminal
+علامة تبويب جديدة	New Tab
+إغلاق علامة التبويب	Close Tab
+الملفات الأخيرة	Recent Files
+فتح مجلد	Open Folder
+تنزيل	Download
+رفع	Upload
+تسجيل الخروج	Log Out
+تسجيل الدخول	Log In
+تعديل الملف الشخصي	Edit Profile
+الإشعارات	Notifications
+تغيير اللغة	Change Language
+تبديل السمة	Toggle Theme
+الوضع الداكن	Dark Mode
+اختصارات لوحة المفاتيح	Keyboard Shortcuts
+إنشاء فرع	Create Branch
+تثبيت التغييرات	Commit Changes
+طلب سحب	Pull Request
+الإضافات	Extensions
+إعادة التحميل	Reload
+طباعة	Print
+حذف	Delete
+إعادة التسمية	Rename
+مشاركة	Share
+إفراغ سلة المهملات	Empty Trash
+لا توجد نتائج	No Results
+عدد النتائج: {n}	Results: {n}
+الصفحة {n} من {m}	Page {n} of {m}

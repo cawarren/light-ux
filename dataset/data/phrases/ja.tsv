@@ -1,0 +1,48 @@
+# Japanese (ja). Format: phrase<TAB>English gloss. NFC. PENDING NATIVE-SPEAKER REVIEW.
+ファイルを開く	Open File
+ファイルを保存	Save File
+名前を付けて保存	Save As
+新しいウィンドウ	New Window
+ウィンドウを閉じる	Close Window
+設定を開く	Open Settings
+設定	Settings
+検索	Search
+置換	Replace
+すべて置換	Replace All
+元に戻す	Undo
+やり直し	Redo
+切り取り	Cut
+コピー	Copy
+貼り付け	Paste
+すべて選択	Select All
+表示	View
+編集	Edit
+ヘルプ	Help
+ターミナルを開く	Open Terminal
+新しいタブ	New Tab
+タブを閉じる	Close Tab
+最近使ったファイル	Recent Files
+フォルダーを開く	Open Folder
+ダウンロード	Download
+アップロード	Upload
+ログアウト	Log Out
+ログイン	Log In
+プロフィールを編集	Edit Profile
+通知	Notifications
+言語を変更	Change Language
+テーマを切り替える	Toggle Theme
+ダークモード	Dark Mode
+キーボードショートカット	Keyboard Shortcuts
+ブランチを作成	Create Branch
+変更をコミット	Commit Changes
+プルリクエスト	Pull Request
+拡張機能	Extensions
+再読み込み	Reload
+印刷	Print
+削除	Delete
+名前を変更	Rename
+共有	Share
+ごみ箱を空にする	Empty Trash
+日本語入力	Japanese Input
+{n}件の結果	{n} results
+{m}ページ中{n}ページ目	Page {n} of {m}

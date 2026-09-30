@@ -1,0 +1,116 @@
+{
+  "verbs": [
+    "open", "close", "toggle", "show", "hide", "go to", "run", "debug", "format", "create",
+    "delete", "rename", "copy", "paste", "duplicate", "split", "select", "find", "replace", "reload",
+    "restart", "install", "uninstall", "enable", "disable", "configure", "reset", "clear", "focus", "move",
+    "sort", "filter", "export", "import", "preview", "compare", "merge", "rebase", "push", "pull",
+    "fetch", "commit", "stash", "checkout", "revert", "undo", "redo", "save", "save all", "fold",
+    "unfold", "collapse", "expand", "add", "remove", "insert", "generate", "refresh", "sync", "share",
+    "pin", "unpin", "archive", "publish", "deploy", "test", "build", "lint", "search", "jump to",
+    "reveal", "view", "inspect", "trigger", "cancel", "stop", "start", "attach", "detach", "rerun",
+    "bookmark", "download", "upload", "edit", "open recent", "change", "manage", "clone", "discard", "stage",
+    "unstage", "approve", "assign", "mention", "invite", "mute", "resolve", "reopen", "restore", "scroll to"
+  ],
+  "nouns": [
+    "file", "folder", "editor", "terminal", "panel", "sidebar", "status bar", "activity bar", "branch", "commit",
+    "tab", "window", "workspace", "extension", "theme", "color theme", "file icon theme", "settings", "keyboard shortcuts", "breakpoint",
+    "symbol", "line", "selection", "cursor", "pull request", "issue", "notebook", "cell", "output", "problems",
+    "debug console", "search results", "snippet", "task", "launch configuration", "remote", "repository", "submodule", "tag", "stash",
+    "diff", "merge conflict", "changes", "staged changes", "recent files", "recent projects", "workspace folder", "user settings", "workspace settings", "keybindings",
+    "command palette", "minimap", "breadcrumbs", "word wrap", "whitespace", "indentation", "line numbers", "comment", "block comment", "bracket",
+    "definition", "references", "implementation", "type definition", "call hierarchy", "outline", "timeline", "source control", "explorer", "test explorer",
+    "coverage", "profile", "account", "notifications", "language mode", "encoding", "end of line sequence", "tab size", "font size", "zen mode",
+    "full screen", "layout", "editor group", "split view", "pane", "markdown preview", "developer tools", "log", "output channel", "console",
+    "environment variables", "secret", "token", "API key", "database", "table", "query", "migration", "schema", "dashboard",
+    "report", "invoice", "customer", "project", "document", "page", "calendar", "event", "message", "channel",
+    "thread", "user", "team", "role", "permission", "webhook", "deployment", "build", "pipeline", "job",
+    "artifact", "container", "image", "cluster", "pod", "service", "bucket", "domain", "certificate", "DNS record",
+    "draft", "template", "label", "milestone", "sprint", "ticket", "note", "bookmark", "favorite", "shortcut"
+  ],
+  "adjectives": [
+    "recent", "new", "next", "previous", "all", "active", "current", "last", "first", "selected",
+    "open", "unsaved", "modified", "default", "global", "local", "remote", "hidden", "pinned", "shared",
+    "archived", "failed", "pending", "draft", "private", "public", "primary", "secondary", "experimental", "legacy"
+  ],
+  "adjuncts": [
+    "in new window", "to the side", "in split view", "for current file", "for workspace", "in terminal", "on save", "from clipboard", "as markdown", "as JSON",
+    "in browser", "with arguments", "without debugging", "to clipboard", "at cursor", "by name", "by date", "by size", "in folder", "on GitHub"
+  ],
+  "categories": [
+    "File", "Edit", "View", "Go", "Git", "Terminal", "Debug", "Preferences", "Developer", "Workspaces",
+    "Search", "Notebook", "Testing", "Tasks", "Help", "Window", "Explorer", "Source Control", "Remote-SSH", "Docker",
+    "Kubernetes", "GitHub", "GitLab", "Jira", "Slack", "Linear", "Figma", "Settings", "Markdown", "Python",
+    "TypeScript", "ESLint", "Prettier", "npm", "Rust Analyzer", "C/C++", "C#", "F#", "Dev Containers", "Live Share"
+  ],
+  "pathDirs": [
+    "src", "app", "apps", "packages", "lib", "libs", "components", "ui", "hooks", "utils",
+    "helpers", "pages", "routes", "api", "server", "client", "styles", "assets", "public", "tests",
+    "__tests__", "fixtures", "scripts", "config", "docs", "types", "models", "services", "store", "state",
+    "features", "shared", "core", "internal", "cmd", "pkg", "crates", "bin", "examples", ".github",
+    "workflows", "migrations", "templates", "vendor", "static", "layouts", "providers", "contexts", "middleware", "e2e"
+  ],
+  "fileBases": [
+    "index", "main", "app", "button", "dialog", "command", "command-menu", "input", "list", "item",
+    "header", "footer", "sidebar", "layout", "page", "route", "schema", "types", "utils", "constants",
+    "config", "theme", "store", "client", "server", "handler", "middleware", "auth", "user", "settings",
+    "search", "results", "popover", "tooltip", "tabs", "table", "form", "select", "checkbox", "toast",
+    "use-debounce", "use-media-query", "api-client", "error-boundary", "date_utils", "string_utils", "setup", "vite.config", "next.config", "tsconfig"
+  ],
+  "rootFiles": [
+    "README.md", "CHANGELOG.md", "LICENSE", "Makefile", "Dockerfile", "package.json", "Cargo.toml", "go.mod", ".gitignore", ".env.example",
+    "pnpm-lock.yaml", "tsconfig.json", "pyproject.toml", "CONTRIBUTING.md", ".editorconfig"
+  ],
+  "extensions": [
+    "ts", "tsx", "js", "jsx", "mjs", "json", "md", "mdx", "css", "scss",
+    "html", "rs", "go", "py", "rb", "java", "kt", "swift", "c", "h",
+    "cpp", "hpp", "cs", "toml", "yaml", "yml", "sql", "sh", "svg", "test.ts"
+  ],
+  "branchPrefixes": [
+    "feat", "fix", "chore", "refactor", "docs", "test", "perf", "ci", "build", "release",
+    "hotfix", "bugfix", "experiment", "spike", "wip"
+  ],
+  "people": [
+    "alex", "sam", "jordan", "taylor", "priya", "wei", "yuki", "omar", "noa", "ana",
+    "lucas", "maria", "chen", "ravi", "fatima", "jonas", "elena", "kenji", "lena", "diego",
+    "amara", "tomas", "ingrid", "mateo", "sofia", "arjun", "hana", "liam", "zoe", "kai"
+  ],
+  "surnames": [
+    "smith", "garcia", "nguyen", "kim", "patel", "cohen", "haddad", "tanaka", "silva", "muller",
+    "rossi", "novak", "johansson", "okafor", "khan", "lee", "martin", "dubois", "kowalski", "sato"
+  ],
+  "settingNamespaces": [
+    "editor", "workbench", "terminal.integrated", "files", "search", "git", "debug", "explorer", "window", "telemetry",
+    "typescript", "javascript", "python", "rust-analyzer", "eslint", "prettier", "extensions", "http", "remote", "security",
+    "update", "zenMode", "diffEditor", "scm", "notebook", "chat", "accessibility", "breadcrumbs", "problems", "testing"
+  ],
+  "settingKeys": [
+    "formatOnSave", "fontSize", "fontFamily", "tabSize", "insertSpaces", "wordWrap", "minimap.enabled", "renderWhitespace", "cursorBlinking", "autoSave",
+    "autoSaveDelay", "exclude", "followSymlinks", "confirmSync", "autofetch", "enableSmartCommit", "defaultProfile.linux", "scrollback", "colorTheme", "iconTheme",
+    "sideBar.location", "restoreWindows", "zoomLevel", "titleBarStyle", "lineNumbers", "rulers", "stickyScroll.enabled", "inlayHints.enabled", "suggest.preview", "hover.delay",
+    "trimTrailingWhitespace", "insertFinalNewline", "encoding", "eol", "maxTokenizationLineLength", "smoothScrolling", "bracketPairColorization.enabled", "guides.indentation", "quickSuggestions", "acceptSuggestionOnEnter"
+  ],
+  "symbolPrefixes": [
+    "use", "get", "set", "is", "has", "handle", "on", "create", "update", "delete",
+    "fetch", "load", "parse", "format", "render", "to", "with", "make", "build", "compute",
+    "validate", "normalize", "resolve", "register", "should", "can", "apply", "merge", "select", "map"
+  ],
+  "symbolNouns": [
+    "layout", "effect", "state", "ref", "memo", "callback", "context", "reducer", "query", "mutation",
+    "user", "session", "token", "item", "items", "list", "index", "value", "props", "config",
+    "options", "theme", "command", "palette", "search", "filter", "score", "result", "results", "row",
+    "node", "tree", "path", "file", "buffer", "cursor", "selection", "range", "event", "listener",
+    "request", "response", "error", "cache", "store", "router", "route", "schema", "field", "form"
+  ],
+  "symbolSuffixes": [
+    "Effect", "State", "Ref", "Handler", "Provider", "Context", "Props", "Service", "Controller", "Manager",
+    "Factory", "Store", "Reducer", "Hook", "Component", "Callback", "Config", "Options", "Error", "Event",
+    "Listener", "Id", "Count", "Index", "Map", "List", "Builder", "Client", "Adapter", "Util"
+  ],
+  "domains": [
+    "github.com", "gitlab.com", "npmjs.com", "example.com", "docs.rs", "developer.mozilla.org", "crates.io", "pypi.org", "stackoverflow.com", "vercel.app",
+    "localhost:3000", "localhost:5173", "127.0.0.1:8080", "internal.example.net", "staging.example.org"
+  ],
+  "tlds": ["com", "org", "net", "io", "dev", "app", "co", "ai"],
+  "suffixWords": ["Notes", "Draft", "v2", "(final)", "Plan", "Review", "Summary", "Checklist", "Retro", "Spec"],
+  "ticketPrefixes": ["PROJ", "WEB", "API", "INFRA", "OPS", "DES", "MOB", "DATA"]
+}

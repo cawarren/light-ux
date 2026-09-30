@@ -1,0 +1,21 @@
+{
+  "name": "@latency-ladder/dataset",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Latency Ladder dataset and query generator (deterministic, seeded).",
+  "engines": { "node": ">=22 <23" },
+  "scripts": {
+    "gen": "node --experimental-strip-types --disable-warning=ExperimentalWarning src/cli.ts gen",
+    "queries": "node --experimental-strip-types --disable-warning=ExperimentalWarning src/cli.ts queries",
+    "commit": "node --experimental-strip-types --disable-warning=ExperimentalWarning src/cli.ts commit",
+    "sample": "node --experimental-strip-types --disable-warning=ExperimentalWarning src/cli.ts sample",
+    "golden": "node --experimental-strip-types --disable-warning=ExperimentalWarning src/cli.ts golden",
+    "test": "node --experimental-strip-types --disable-warning=ExperimentalWarning --test test/*.test.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.8.0"
+  }
+}

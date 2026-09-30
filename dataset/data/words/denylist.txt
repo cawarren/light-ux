@@ -1,0 +1,56 @@
+# EFF words excluded from generated items (UI-like templates). One word per line.
+# Conservative: crude, sexual, violent, bodily, slur-adjacent, political or trademark words
+# that would read badly in a command palette. The EFF file itself stays unmodified;
+# the filter is applied at load (src/data.ts). Changing this list changes the dataset.
+arson
+backstab
+bullwhip
+carnage
+chokehold
+choking
+diaper
+enslave
+facebook
+flogging
+fondling
+gallows
+gangrene
+google
+gore
+gory
+groin
+grope
+handgun
+kissable
+lustfully
+lustily
+lustiness
+lusty
+maimed
+marxism
+moisten
+moistness
+mutilated
+mutilator
+onslaught
+opium
+pantyhose
+pelvis
+pregnancy
+pregnant
+racism
+scabbed
+scabby
+slain
+strangle
+thigh
+thong
+throbbing
+unbutton
+underwear
+undress
+unisexual
+urologist
+urology
+widow
+womb

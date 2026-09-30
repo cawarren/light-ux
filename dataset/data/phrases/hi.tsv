@@ -1,0 +1,49 @@
+# Hindi (hi, Devanagari). Format: phrase<TAB>English gloss. NFC: nukta letters are base + U+093C (U+0958-095F are NFC composition exclusions). PENDING NATIVE-SPEAKER REVIEW.
+फ़ाइल खोलें	Open File
+फ़ाइल सहेजें	Save File
+इस रूप में सहेजें	Save As
+नई विंडो	New Window
+विंडो बंद करें	Close Window
+सेटिंग्स खोलें	Open Settings
+सेटिंग्स	Settings
+खोजें	Search
+बदलें	Replace
+सभी बदलें	Replace All
+पूर्ववत करें	Undo
+फिर से करें	Redo
+काटें	Cut
+कॉपी करें	Copy
+चिपकाएँ	Paste
+सभी चुनें	Select All
+देखें	View
+संपादित करें	Edit
+सहायता	Help
+टर्मिनल खोलें	Open Terminal
+नया टैब	New Tab
+टैब बंद करें	Close Tab
+हाल की फ़ाइलें	Recent Files
+फ़ोल्डर खोलें	Open Folder
+डाउनलोड करें	Download
+अपलोड करें	Upload
+लॉग आउट करें	Log Out
+लॉग इन करें	Log In
+प्रोफ़ाइल संपादित करें	Edit Profile
+सूचनाएँ	Notifications
+भाषा बदलें	Change Language
+थीम बदलें	Change Theme
+डार्क मोड	Dark Mode
+कीबोर्ड शॉर्टकट	Keyboard Shortcuts
+ब्रांच बनाएँ	Create Branch
+बदलाव कमिट करें	Commit Changes
+पुल रिक्वेस्ट	Pull Request
+एक्सटेंशन	Extensions
+दोबारा लोड करें	Reload
+प्रिंट करें	Print
+हटाएँ	Delete
+नाम बदलें	Rename
+साझा करें	Share
+रीसायकल बिन खाली करें	Empty Recycle Bin
+ज़रूरी सूचना	Important Notice
+क्षेत्रीय भाषा	Regional Language
+{n} परिणाम	{n} results
+पृष्ठ {n} / {m}	Page {n} / {m}

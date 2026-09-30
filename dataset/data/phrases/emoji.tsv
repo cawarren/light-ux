@@ -1,0 +1,86 @@
+# Emoji (Emoji <= 13.0 only; see README). Format: emoji<TAB>label<TAB>kind (single|zwj|skin|keycap|flag). Fully-qualified sequences.
+🚀	Deploy	single
+🐛	Bug	single
+✨	New Feature	single
+🔥	Hotfix	single
+📁	Folder	single
+📄	Document	single
+⚙️	Settings	single
+🔍	Search	single
+💾	Save	single
+🗑️	Trash	single
+📌	Pin	single
+⭐	Favorite	single
+✅	Done	single
+❌	Cancel	single
+⚠️	Warning	single
+🔒	Lock	single
+🔓	Unlock	single
+📦	Package	single
+🧪	Test	single
+📝	Notes	single
+🎨	Theme	single
+🌙	Dark Mode	single
+☀️	Light Mode	single
+🔔	Notifications	single
+💬	Comments	single
+📊	Dashboard	single
+🧹	Cleanup	single
+♻️	Refactor	single
+🏷️	Tag	single
+🔀	Merge	single
+⏪	Rewind	single
+👀	Review	single
+💡	Idea	single
+🎉	Release	single
+🔟	Step Ten	single
+👩‍💻	Developer	zwj
+👨‍💻	Developer	zwj
+🧑‍💻	Developer	zwj
+👩‍🔬	Scientist	zwj
+👨‍🍳	Cook	zwj
+👩‍🚀	Astronaut	zwj
+🧑‍🎨	Artist	zwj
+👨‍👩‍👧	Family	zwj
+👨‍👩‍👧‍👦	Family	zwj
+👩‍❤️‍👨	Couple	zwj
+🏳️‍🌈	Rainbow Flag	zwj
+🏴‍☠️	Pirate Flag	zwj
+🐻‍❄️	Polar Bear	zwj
+🧑‍🤝‍🧑	Pair Programming	zwj
+👁️‍🗨️	Witness	zwj
+👍🏽	Thumbs Up	skin
+👋🏻	Wave	skin
+👏🏿	Applause	skin
+🙌🏾	Celebrate	skin
+👌🏼	OK	skin
+✌🏽	Victory	skin
+👩🏽‍💻	Developer	skin
+🧑🏻‍🏫	Teacher	skin
+#️⃣	Channel	keycap
+*️⃣	Starred	keycap
+0️⃣	Step Zero	keycap
+1️⃣	Step One	keycap
+2️⃣	Step Two	keycap
+3️⃣	Step Three	keycap
+4️⃣	Step Four	keycap
+5️⃣	Step Five	keycap
+6️⃣	Step Six	keycap
+7️⃣	Step Seven	keycap
+8️⃣	Step Eight	keycap
+9️⃣	Step Nine	keycap
+🇯🇵	Japanese	flag
+🇨🇳	Chinese (Simplified)	flag
+🇹🇼	Chinese (Traditional)	flag
+🇰🇷	Korean	flag
+🇮🇳	Hindi	flag
+🇮🇱	Hebrew	flag
+🇸🇦	Arabic	flag
+🇪🇬	Arabic (Egypt)	flag
+🇺🇸	English (US)	flag
+🇬🇧	English (UK)	flag
+🇩🇪	German	flag
+🇫🇷	French	flag
+🇧🇷	Portuguese (Brazil)	flag
+🇪🇸	Spanish	flag
+🇪🇺	European Union	flag

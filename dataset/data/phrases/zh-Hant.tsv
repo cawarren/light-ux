@@ -1,0 +1,48 @@
+# Traditional Chinese (zh-Hant, Taiwan usage). Format: phrase<TAB>English gloss. NFC. PENDING NATIVE-SPEAKER REVIEW.
+開啟檔案	Open File
+儲存檔案	Save File
+另存新檔	Save As
+新增視窗	New Window
+關閉視窗	Close Window
+開啟設定	Open Settings
+設定	Settings
+搜尋	Search
+取代	Replace
+全部取代	Replace All
+復原	Undo
+重做	Redo
+剪下	Cut
+複製	Copy
+貼上	Paste
+全選	Select All
+檢視	View
+編輯	Edit
+說明	Help
+開啟終端機	Open Terminal
+新增分頁	New Tab
+關閉分頁	Close Tab
+最近開啟的檔案	Recent Files
+開啟資料夾	Open Folder
+下載	Download
+上傳	Upload
+登出	Log Out
+登入	Log In
+編輯個人檔案	Edit Profile
+通知	Notifications
+變更語言	Change Language
+切換主題	Toggle Theme
+深色模式	Dark Mode
+鍵盤快速鍵	Keyboard Shortcuts
+建立分支	Create Branch
+提交變更	Commit Changes
+提取要求	Pull Request
+擴充功能	Extensions
+重新載入	Reload
+列印	Print
+刪除	Delete
+重新命名	Rename
+分享	Share
+清理資源回收筒	Empty Recycle Bin
+注音輸入法	Zhuyin Input Method
+共{n}筆結果	{n} results
+第{n}頁，共{m}頁	Page {n} of {m}

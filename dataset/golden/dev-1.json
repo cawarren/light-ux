@@ -1,0 +1,29 @@
+{
+  "seedId": "dev-1",
+  "queryCount": 1000,
+  "queryMode": "shared",
+  "sha256": {
+    "sizes": {
+      "1000": {
+        "items.json": "88ee93529a796b7de5d1a7017ba16e9146116d2b80de58a202bb6c09f799d550",
+        "manifest.json": "9b6814934495d37050a4c5b0c18cb4a0802cd821e0e1ff5095366e7f2e0223bc"
+      },
+      "10000": {
+        "items.json": "a8c6a56b2315bcdb67cff28b49db95bb63fb15c123c69d30a113d63df6f436f3",
+        "manifest.json": "0a2a930e6d99c278ade80de36b9d536c4c9ad4dabd3dc5d87bd6c04f7a69b1b7"
+      },
+      "50000": {
+        "items.json": "b6c137cb38a0a43ba4c5d75f3983c5d78eddcc98d74487ad2621d4a1bf3295f5",
+        "manifest.json": "0a2b8f4d3df2e570ed02ef090c8cd19f1d91da2a7f501ef58eb35ca1e9ee62bc"
+      },
+      "100000": {
+        "items.json": "a8db622cb9664dd2168f30fabd482f8da9229129ad1af19f33148a41caf650ae",
+        "manifest.json": "3076e0b8d55fc34b9e63bfd49939c30cae02b231d9a316c75a627928c28726d0"
+      }
+    },
+    "shared": {
+      "queries.json": "3733ec2b82b4a586184eb7915b488b192e5f644f971d7c9865be5778c8da755c",
+      "manifest.json": "ba34692f494ff1b74347f0d6ca94a2cf7bc8bd0b28b37e5b92722be2978c2f56"
+    }
+  }
+}
