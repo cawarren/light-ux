@@ -11,6 +11,8 @@
 > | Reports 01–02: a minimal subset (Teensy, one BPW34 sensor, HID output, simple edge detection) | **Phase B** |
 > | Reports 01–04 and 07 in full: rig, isolation, calibration, floors, camera, second photodiode | **Phase C** |
 >
+> The hardware findings and recommended parts are summarized in [`../hardware-notes.md`](../hardware-notes.md), including the minimal subset for Phase B.
+>
 > Of the decisions below, these are needed before Phase A work: 7 (marker placement), 8 (test machine), 10 (windowed vs fullscreen), 12 (Chrome pinning), 13 (Wayland compositor), 15 (panel self-refresh), 17 (key cadence), and all of D-C (22–32). The rest wait for Phase B or C.
 
 Scoped 2026-09-29 against [`docs/spec.md`](../spec.md). This page combines five scoping reports:

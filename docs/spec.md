@@ -174,14 +174,20 @@ Four machines cover the questions that matter: a fast desktop, a second OS, the 
 
 | Phase | Builds | Measures with | Hardware | Gate at the end |
 | --- | --- | --- | --- | --- |
-| **A. Web ladder, software only** (~2 weeks) | Dataset and reference ranking; R1, R2, R3 (R4 optional) in Chrome; a playground with blind comparison Real OS-level keystrokes (`uinput`) timestamped by the harness, to the on-screen time of the frame where the marker flipped (Element Timing presentation time on the marker; trace fallback). Chrome traces only for the per-stage breakdown. Blind comparison trials; 240 fps phone video for spot checks | None | **Gate A:** is the R1→R3 gap large (≥3× or several frames at p95), and can a person tell rungs apart blind more often than chance? |
+| **A. Web ladder, software only** (~2 weeks) | Dataset and reference ranking; R1, R2, R3 (R4 optional) in Chrome; a playground with blind comparison Real OS-level keystrokes (`uinput`) timestamped by the harness, to the on-screen time of the frame where the marker flipped (Element Timing presentation time on the marker; trace fallback). Chrome traces only for the per-stage breakdown. Blind comparison trials; 240 fps phone video for spot checks | None | **Gate A:** is the R1→R3 gap large (≥3× or several frames at p95), **and** can a person tell rungs apart blind more often than chance? Both are required. |
 | **B. Cross the browser boundary** (~2–3 weeks) | R5 native (and R4 if not built in A) | A minimal photodiode rig: Teensy and one sensor, simple edge detection, no calibration suite, camera or isolation | ~$40 | **Gate B:** is the browser tax (R4→R5) large enough to warrant frame-level attribution? |
 | **C. Rigorous and publishable** (~4–6 weeks) | R6; full parity suite; agent optimization loop | The full rig, calibration and validation camera scoped in docs/phase-0 (reports 01–04, 06, 07); several machines; two-day reproducibility | Full rig, camera | Publish results, rig design and raw data |
 | **D. Extensions** | Library extraction, local-first rung, sample app, other browsers, dataset size sweep | As in C | — | — |
 
 **What each gate can and cannot conclude.** Phase A measures only the framework and DOM layers. A small gap at Gate A refutes the lazy-tax part of the hypothesis for those layers. It says nothing about the browser, compositor or display costs, which only Phase B and C can see. Deciding whether to continue past Gate A is therefore two decisions: whether to pursue the web rungs further, and separately whether to pursue the browser boundary.
 
+**Web rungs are served cross-origin isolated** (COOP `same-origin`, COEP `require-corp`), R1 included, so every rung gets the same 5 µs timers. The report notes that a typical production app would not be isolated.
+
 **Kept from the original plan.** Every rung draws the latency marker in the same frame as its list update from day one, so Phase A rungs work unchanged under the rig later. Phase A's data model and statistics are the orchestrator's (docs/phase-0/03-orchestrator.md), with software measurements as the source.
+
+**Performance Olympics after each milestone.** Before each gate review, a two-wave agent competition looks for the largest remaining improvement: first proposals with no limit on implementation complexity, scored by measured rather than predicted gain; then one builder agent per selected proposal, however long the build. See docs/olympics.md.
+
+**Hardware decisions carried forward.** The rig research done before the rephasing is summarized in docs/hardware-notes.md, so Phases B and C start from it.
 
 **Phase A checklist** (detail in docs/phase-a/README.md)
 
@@ -191,6 +197,7 @@ Four machines cover the questions that matter: a fast desktop, a second OS, the 
 - [ ] Half-day check on the laptop of the harness's unconfirmed assumptions (task A1 in docs/phase-a)
 - [ ] Playground with blind ABX mode and an adjustable added-latency control, to calibrate what differences are perceptible
 - [ ] Phone slow-motion spot check against the software numbers
+- [ ] Performance Olympics on R2 and R3 (docs/olympics.md)
 - [ ] Gate A review
 
 **Deferred to Phase C** (the original Phase 0 checklist, scoped in docs/phase-0/)
@@ -220,6 +227,8 @@ With coding capacity effectively unlimited, the bottleneck becomes measurement a
 - Detecting the test environment, dataset or seed is forbidden and checked in code review.
 - The marker-honesty check runs on every accepted change (a software same-frame check in Phase A; the second photodiode and camera from Phase C).
 - A human reviews any change that touches input handling, frame timing or present modes.
+
+**Performance Olympics.** At each milestone the optimization loop above is run as a competition; see docs/olympics.md.
 
 **Fairness between rungs.** Each of R2 to R5 gets the same agent budget, and actual effort is recorded as a result. The cost of optimization is part of the answer, because it speaks to the business argument for why teams skip it.
 

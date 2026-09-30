@@ -124,7 +124,7 @@ The harness server injects `probe.js` into every rung's HTML (§4.3), so rung co
 
 Check `crossOriginIsolated === true` in the probe, and refuse the block otherwise.
 
-This is a response-header change made by the harness proxy, not a change to rung code. It also allows `SharedArrayBuffer`, which an agent-optimised R3/R4 could exploit. Record it as a rule: rungs may use it only if it is on the R2/R3 allow-list. **[decide]**
+This is a response-header change made by the harness proxy, not a change to rung code. It also allows `SharedArrayBuffer`, which an agent-optimised R3/R4 could exploit. **Decided 2026-09-30: every rung, R1 included, is served cross-origin isolated.** Still open: whether rungs may use `SharedArrayBuffer` (proposed: only if it is on the R2/R3 allow-list).
 
 ### 1.4 Cross-origin isolation and "typical" R1
 
@@ -570,7 +570,7 @@ Analysis lives in `ladder soft report blind`.
 
 ### 7.3 Interpreting Gate A
 
-**Proposed pass rule. [decide]** Proceed to build R4/Phase B and invest in the rig if both of the following hold:
+**Pass rule.** Both conditions are required: **perceptibility is a hard requirement (decided 2026-09-30)**. The gap thresholds in condition 1 are still proposals. Proceed to build R4/Phase B and invest in the rig only if both hold:
 
 1. **The gap is large.** At the headline settings (60 Hz, headline dataset size, `A.first_key`, M sessions), either:
    - p95(R1) / p95(R3) ≥ 3 with the lower CI bound ≥ 2, **or**
@@ -584,7 +584,7 @@ Analysis lives in `ladder soft report blind`.
 | Result | Meaning | Next |
 | --- | --- | --- |
 | Large gap and perceptible | Lazy tax exists and matters | Phase B photodiode, to check the gap survives to photons and to open the browser-vs-native comparison |
-| Large gap, not perceptible | The owner's threshold is above the gap, or the scenario is not what users feel | Check JND; try 10k vs 50k and 60 Hz; consider whether "perceptible" should be a gate at all |
+| Large gap, not perceptible | **Gate A fails.** The owner's threshold is above the gap, or the scenario is not what users feel | Before stopping: check the JND, and try 10k vs 50k and 60 Hz to see whether some realistic setting is perceptible |
 | Small gap | The browser pipeline dominates, or R1 is fast at this size | The browser tax (R5) becomes the interesting question, and that needs Phase B |
 | Gap only at 50k | Size-dependent lazy tax | Informs D-C 24 |
 
@@ -668,9 +668,9 @@ A12 (playground) runs in parallel with A7–A11.
 ### 8.4 Open decisions for the owner
 
 1. **Headline metric for Gate A.** `lat_present_ms` on `A.first_key` at 60 Hz (recommended), with `A.seq` reported alongside.
-2. **Gate A thresholds.** ≥ 3x p95 **or** ≥ 2 frames (§7.3), plus blind 2AFC above chance. Is perceptibility a hard gate or advisory?
+2. **Gate A thresholds.** ≥ 3x p95 **or** ≥ 2 frames (§7.3). *Decided: blind 2AFC above chance is a hard requirement.*
 3. **Dataset size for Phase A headline.** Run both 50k and 10k (recommended); pick one for the gate.
-4. **Cross-origin isolation** for all rungs (recommended), and whether rungs may use `SharedArrayBuffer`.
+4. *Decided: cross-origin isolation for all rungs.* Still open: whether rungs may use `SharedArrayBuffer`.
 5. **Display mode:** fullscreen, maximized, or both (both recommended in Phase A).
 6. **Blind protocol:** 2AFC (recommended) or ABX; trials per pair (40 recommended); whether "no difference" is allowed.
 7. **Latency-injection mode:** defer (recommended) or block, or both.
