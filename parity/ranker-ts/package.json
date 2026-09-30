@@ -1,0 +1,43 @@
+{
+  "name": "@latency-ladder/ranker-ts",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Latency Ladder reference ranker: vendored cmdk 1.1.1 command-score with a frozen POW_0999 table, plus rank(), goldens and conform.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22 <23"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "gen:tables": "node scripts/gen-tables.ts",
+    "gen:edge": "node scripts/gen-edge-goldens.ts",
+    "fixtures": "node scripts/gen-fixture.ts && node scripts/gen-fixture.ts --count 50000 --out ../fixtures/f50k && node scripts/gen-fixture.ts --count 5000 --clean --out ../fixtures/f5k-clean",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "node --test test/*.test.ts",
+    "test:rs": "cd ../ranker-rs && cargo test --release",
+    "test:bitexact": "node scripts/browser-bitexact.ts",
+    "test:oracle": "node scripts/browser-oracle.ts",
+    "test:diff": "node scripts/diff-ts-rs.ts",
+    "test:fuzz": "node scripts/fuzz.ts --cases 200000 && node scripts/fuzz.ts --cases 200000 --oracle chromium --seed 2 && node scripts/fuzz.ts --cases 200000 --oracle chromium --seed 4 --wide",
+    "test:wasm": "node scripts/wasm-check.ts",
+    "verify": "npm run typecheck && npm test && npm run test:rs && npm run fixtures && npm run test:diff && npm run test:fuzz && npm run test:wasm && npm run test:bitexact && npm run test:oracle",
+    "bench": "cd ../ranker-rs && cargo build --release -q && ./target/release/rank-cli bench --items ../fixtures/f50k/items.json --queries ../fixtures/f50k/queries.json --repeat 3 && cd ../ranker-ts && node scripts/rank-cli.ts bench --items ../fixtures/f50k/items.json --queries ../fixtures/f50k/queries.json --repeat 3",
+    "golden": "node scripts/golden.ts",
+    "conform": "node scripts/conform.ts",
+    "rank-cli": "node scripts/rank-cli.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "19.1",
+    "@types/react-dom": "19.1",
+    "cmdk": "1.1.1",
+    "esbuild": "^0.25.0",
+    "playwright": "1.56.1",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "typescript": "^5.9.0"
+  }
+}

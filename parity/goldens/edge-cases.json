@@ -1,0 +1,626 @@
+{
+ "schema": 1,
+ "about": "Hand-written edge goldens for cmdkScore_1_1_1(item, q, []) (normative: docs/phase-0/05-software-foundations.md §2.1, §2.2, §0). 'expr' is the hand derivation: a left-to-right product in evaluation order, where P(n) = POW_0999[n]. scripts/gen-edge-goldens.ts evaluates expr (NOT the scorer) into 'bits'. Strings that cannot be JSON strings (lone surrogates) are given as {\"units\":[...]} of UTF-16 code units. GENERATED from edge-cases.src.json by parity/ranker-ts/scripts/gen-edge-goldens.ts; edit the .src.json.",
+ "cases": [
+  {
+   "id": "exact",
+   "item": "open",
+   "q": "open",
+   "expr": "1",
+   "row": "score constants: continue match",
+   "bits": "3ff0000000000000"
+  },
+  {
+   "id": "not-complete",
+   "item": "open file",
+   "q": "open",
+   "expr": "0.99",
+   "row": "PENALTY_NOT_COMPLETE",
+   "bits": "3fefae147ae147ae"
+  },
+  {
+   "id": "case-mismatch-first",
+   "item": "Open",
+   "q": "open",
+   "expr": "1*0.9999",
+   "row": "PENALTY_CASE_MISMATCH compares original chars",
+   "bits": "3fefff2e48e8a71e"
+  },
+  {
+   "id": "case-mismatch-all",
+   "item": "open",
+   "q": "OPEN",
+   "expr": "1*0.9999*0.9999*0.9999*0.9999",
+   "row": "case mismatch per char",
+   "bits": "3feffcb943d86610"
+  },
+  {
+   "id": "space-word-jump",
+   "item": "go to",
+   "q": "t",
+   "expr": "0.99*0.9",
+   "row": "SCORE_SPACE_WORD_JUMP",
+   "bits": "3fec83126e978d50"
+  },
+  {
+   "id": "non-space-word-jump",
+   "item": "a/b",
+   "q": "b",
+   "expr": "1*0.8",
+   "row": "SCORE_NON_SPACE_WORD_JUMP",
+   "bits": "3fe999999999999a"
+  },
+  {
+   "id": "char-jump",
+   "item": "abc",
+   "q": "c",
+   "expr": "1*0.17",
+   "row": "SCORE_CHARACTER_JUMP (no skip penalty at stringIndex 0)",
+   "bits": "3fc5c28f5c28f5c3"
+  },
+  {
+   "id": "char-jump-skip",
+   "item": "abcd",
+   "q": "ad",
+   "expr": "1*0.17*P(2)",
+   "row": "skip penalty 0.999^(index-stringIndex)",
+   "bits": "3fc5b76ca8cab9f9"
+  },
+  {
+   "id": "char-jump-skip-50",
+   "item": "ayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyb",
+   "q": "ab",
+   "expr": "1*0.17*P(50)",
+   "row": "skip penalty, larger n (table value)",
+   "bits": "3fc4b2bf7e83bb5e"
+  },
+  {
+   "id": "space-jump-penalty",
+   "item": "ab c d",
+   "q": "ad",
+   "expr": "1*0.9*P(1)",
+   "row": "space breaks counted in original slice",
+   "bits": "3fecc56d5cfaacda"
+  },
+  {
+   "id": "space-jump-counts-hyphen",
+   "item": "ab c-d e",
+   "q": "ae",
+   "expr": "1*0.9*P(2)",
+   "row": "COUNT_SPACE_REGEXP = /[\\s-]/g",
+   "bits": "3fecbe0fd0579bc9"
+  },
+  {
+   "id": "gap-jump-penalty",
+   "item": "a_b/c",
+   "q": "ac",
+   "expr": "1*0.8*P(1)",
+   "row": "gap breaks counted",
+   "bits": "3fe9930be0ded289"
+  },
+  {
+   "id": "gap-jump-penalty-2",
+   "item": "ab/c/d/e",
+   "q": "ae",
+   "expr": "1*0.8*P(2)",
+   "row": "gap breaks counted",
+   "bits": "3fe98c7fd5a33524"
+  },
+  {
+   "id": "gap-prev-space-inside",
+   "item": "ab c/e",
+   "q": "ae",
+   "expr": "1*0.8",
+   "row": "gap jump counts only gaps; slice(1,4)='b c' has none",
+   "bits": "3fe999999999999a"
+  },
+  {
+   "id": "slice-empty",
+   "item": "a/b",
+   "q": "ab",
+   "expr": "1*0.8",
+   "row": "slice(1,1) === '' -> no penalty",
+   "bits": "3fe999999999999a"
+  },
+  {
+   "id": "gap-hash",
+   "item": "a#b",
+   "q": "b",
+   "expr": "1*0.8",
+   "row": "IS_GAP_REGEXP member #",
+   "bits": "3fe999999999999a"
+  },
+  {
+   "id": "gap-amp",
+   "item": "a&b",
+   "q": "b",
+   "expr": "1*0.8",
+   "row": "IS_GAP_REGEXP member &",
+   "bits": "3fe999999999999a"
+  },
+  {
+   "id": "gap-backslash",
+   "item": "a\\b",
+   "q": "b",
+   "expr": "1*0.8",
+   "row": "IS_GAP_REGEXP member \\",
+   "bits": "3fe999999999999a"
+  },
+  {
+   "id": "gap-brace",
+   "item": "a{b",
+   "q": "b",
+   "expr": "1*0.8",
+   "row": "IS_GAP_REGEXP member {",
+   "bits": "3fe999999999999a"
+  },
+  {
+   "id": "not-gap-close-paren",
+   "item": "a)b",
+   "q": "b",
+   "expr": "1*0.17",
+   "row": ") is not a gap",
+   "bits": "3fc5c28f5c28f5c3"
+  },
+  {
+   "id": "not-gap-comma",
+   "item": "a,b",
+   "q": "b",
+   "expr": "1*0.17",
+   "row": ", is not a gap",
+   "bits": "3fc5c28f5c28f5c3"
+  },
+  {
+   "id": "distance-from-start-unused-1",
+   "item": "zzzzzzzzzzzzzzzzzzzz open",
+   "q": "open",
+   "expr": "1*0.9",
+   "row": "PENALTY_DISTANCE_FROM_START unused",
+   "bits": "3feccccccccccccd"
+  },
+  {
+   "id": "distance-from-start-unused-2",
+   "item": "zz open",
+   "q": "open",
+   "expr": "1*0.9",
+   "row": "PENALTY_DISTANCE_FROM_START unused",
+   "bits": "3feccccccccccccd"
+  },
+  {
+   "id": "unicode-case-fold",
+   "item": "ÖFFNEN",
+   "q": "öffnen",
+   "expr": "1*0.9999*0.9999*0.9999*0.9999*0.9999*0.9999",
+   "row": "full Unicode toLowerCase",
+   "bits": "3feffb1605f902e3"
+  },
+  {
+   "id": "hyphen-vs-space",
+   "item": "a-b",
+   "q": "a b",
+   "expr": "1*0.9999",
+   "row": "§0: 'a b' vs 'a-b' = 0.9999",
+   "bits": "3fefff2e48e8a71e"
+  },
+  {
+   "id": "space-vs-hyphen",
+   "item": "a b",
+   "q": "a-b",
+   "expr": "1*0.9999",
+   "row": "§2.1 case folding row",
+   "bits": "3fefff2e48e8a71e"
+  },
+  {
+   "id": "ws-nbsp",
+   "item": "a b",
+   "q": "a b",
+   "expr": "1*0.9999",
+   "row": "JS \\s includes U+00A0",
+   "bits": "3fefff2e48e8a71e"
+  },
+  {
+   "id": "ws-feff",
+   "item": "a﻿b",
+   "q": "a b",
+   "expr": "1*0.9999",
+   "row": "JS \\s includes U+FEFF (Rust is_whitespace does not)",
+   "bits": "3fefff2e48e8a71e"
+  },
+  {
+   "id": "ws-tab",
+   "item": "a\tb",
+   "q": "a b",
+   "expr": "1*0.9999",
+   "row": "JS \\s includes TAB",
+   "bits": "3fefff2e48e8a71e"
+  },
+  {
+   "id": "ws-ideographic",
+   "item": "a　b",
+   "q": "a b",
+   "expr": "1*0.9999",
+   "row": "JS \\s includes U+3000",
+   "bits": "3fefff2e48e8a71e"
+  },
+  {
+   "id": "ws-nel-not-space",
+   "item": "ab",
+   "q": "a b",
+   "expr": "0",
+   "row": "U+0085 is NOT JS \\s (Rust is_whitespace says it is)",
+   "bits": "0000000000000000"
+  },
+  {
+   "id": "ws-zwsp-not-space",
+   "item": "a​b",
+   "q": "a b",
+   "expr": "0",
+   "row": "U+200B is not JS \\s",
+   "bits": "0000000000000000"
+  },
+  {
+   "id": "space-query",
+   "item": "x y",
+   "q": " ",
+   "expr": "0.99*0.17",
+   "row": "' ' is a real query: 0.1683",
+   "bits": "3fc58adab9f559b4"
+  },
+  {
+   "id": "space-query-nomatch",
+   "item": "xy",
+   "q": " ",
+   "expr": "0",
+   "row": "' ' matches only whitespace or '-'",
+   "bits": "0000000000000000"
+  },
+  {
+   "id": "space-query-hyphen",
+   "item": "x-y",
+   "q": " ",
+   "expr": "0.99*0.17*0.9999",
+   "row": "'-' is space-equivalent, but original differs",
+   "bits": "3fc58a4d8bcf00af"
+  },
+  {
+   "id": "trailing-space-query",
+   "item": "x y",
+   "q": "x ",
+   "expr": "0.99",
+   "row": "no trim",
+   "bits": "3fefae147ae147ae"
+  },
+  {
+   "id": "cafe-diacritic",
+   "item": "café",
+   "q": "cafe",
+   "expr": "0",
+   "row": "no diacritic folding",
+   "bits": "0000000000000000"
+  },
+  {
+   "id": "nfd-query",
+   "item": "café",
+   "q": "café",
+   "expr": "0",
+   "row": "no normalization: NFD query vs NFC item",
+   "bits": "0000000000000000"
+  },
+  {
+   "id": "nfd-item",
+   "item": "café",
+   "q": "café",
+   "expr": "0",
+   "row": "no normalization: NFC query vs NFD item",
+   "bits": "0000000000000000"
+  },
+  {
+   "id": "transposition-dup",
+   "item": "op",
+   "q": "opp",
+   "expr": "1*0.1",
+   "row": "§0.5 duplicate-letter branch",
+   "bits": "3fb999999999999a"
+  },
+  {
+   "id": "transposition-swap",
+   "item": "ba",
+   "q": "ab",
+   "expr": "1*0.1",
+   "row": "§0.5 transposition",
+   "bits": "3fb999999999999a"
+  },
+  {
+   "id": "transposition-request",
+   "item": "request",
+   "q": "reqeust",
+   "expr": "1*0.1",
+   "row": "§0.5",
+   "bits": "3fb999999999999a"
+  },
+  {
+   "id": "doubled-letter",
+   "item": "open",
+   "q": "oppen",
+   "expr": "1*0.1",
+   "row": "doubled letter query",
+   "bits": "3fb999999999999a"
+  },
+  {
+   "id": "i-dot-misalign",
+   "item": "İstanbul",
+   "q": "istanbul",
+   "expr": "0.99*0.9999*0.9999*0.9999*0.9999*0.9999*0.9999*0.17*P(1)*0.9999*0.9999",
+   "row": "U+0130 lengthens lowerString; indices misalign (0.168)",
+   "bits": "3fc580ef0179d322"
+  },
+  {
+   "id": "i-dot-charAt-out-of-range",
+   "item": "İx",
+   "q": "x",
+   "expr": "0.99*0.17*0.9999",
+   "row": "string.charAt(2) === '' (out of range) -> case penalty",
+   "bits": "3fc58a4d8bcf00af"
+  },
+  {
+   "id": "i-dot-query",
+   "item": "i̇x",
+   "q": "İ",
+   "expr": "0.99*0.9999",
+   "row": "query İ lowers to i+U+0307; only abbreviation.length (1) units are consumed",
+   "bits": "3fefad44dca8e2e3"
+  },
+  {
+   "id": "i-dot-crash",
+   "item": "i̇",
+   "q": "İ̇",
+   "error": "RangeError",
+   "row": "upstream cmdk recurses without bound (Maximum call stack) -> error"
+  },
+  {
+   "id": "final-sigma-no-match",
+   "item": "ΑΣ",
+   "q": "σ",
+   "expr": "0",
+   "row": "Final_Sigma: 'ΑΣ'.toLowerCase() === 'ας'",
+   "bits": "0000000000000000"
+  },
+  {
+   "id": "final-sigma-match",
+   "item": "ΑΣ",
+   "q": "ς",
+   "expr": "1*0.17*0.9999",
+   "row": "Final_Sigma",
+   "bits": "3fc5c200c0f01fb9"
+  },
+  {
+   "id": "sigma-initial",
+   "item": "ΣΑ",
+   "q": "σα",
+   "expr": "1*0.9999*0.9999",
+   "row": "non-final Σ -> σ",
+   "bits": "3feffe5c972fb1f5"
+  },
+  {
+   "id": "sigma-word-final",
+   "item": "ΟΔΟΣ ΑΒ",
+   "q": "οδοσ",
+   "expr": "0",
+   "row": "Σ before space is final",
+   "bits": "0000000000000000"
+  },
+  {
+   "id": "sigma-query-alone",
+   "item": "σ",
+   "q": "Σ",
+   "expr": "1*0.9999",
+   "row": "lone Σ lowers to σ",
+   "bits": "3fefff2e48e8a71e"
+  },
+  {
+   "id": "sigma-ignorable",
+   "item": "Α'Σ",
+   "q": "ς",
+   "expr": "1*0.17*0.9999",
+   "row": "apostrophe is case-ignorable: still final",
+   "bits": "3fc5c200c0f01fb9"
+  },
+  {
+   "id": "kelvin",
+   "item": "K",
+   "q": "k",
+   "expr": "1*0.9999",
+   "row": "KELVIN SIGN lowers to k",
+   "bits": "3fefff2e48e8a71e"
+  },
+  {
+   "id": "capital-sharp-s",
+   "item": "ẞ",
+   "q": "ß",
+   "expr": "1*0.9999",
+   "row": "U+1E9E lowers to ß",
+   "bits": "3fefff2e48e8a71e"
+  },
+  {
+   "id": "astral-pair",
+   "item": "a😀b",
+   "q": "😀",
+   "expr": "0.99*0.17",
+   "row": "UTF-16 units: emoji matched unit by unit",
+   "bits": "3fc58adab9f559b4"
+  },
+  {
+   "id": "astral-lone-high",
+   "item": "a😀b",
+   "q": {
+    "units": [
+     55357
+    ]
+   },
+   "expr": "0.99*0.17",
+   "row": "lone high surrogate query matches half a pair",
+   "bits": "3fc58adab9f559b4"
+  },
+  {
+   "id": "astral-lone-low",
+   "item": "a😀b",
+   "q": {
+    "units": [
+     56832
+    ]
+   },
+   "expr": "0.99*0.17",
+   "row": "lone low surrogate query",
+   "bits": "3fc58adab9f559b4"
+  },
+  {
+   "id": "zwj-sequence",
+   "item": "👩‍💻 dev",
+   "q": "💻",
+   "expr": "0.99*0.17",
+   "row": "ZWJ emoji: best of two D83D positions",
+   "bits": "3fc58adab9f559b4"
+  },
+  {
+   "id": "deseret-case",
+   "item": "𐐀x",
+   "q": "𐐨",
+   "expr": "0.99*0.9999",
+   "row": "astral case pair: penalty from the low unit only",
+   "bits": "3fefad44dca8e2e3"
+  },
+  {
+   "id": "empty-query-score",
+   "item": "abc",
+   "q": "",
+   "expr": "0.99",
+   "row": "score('abc','') (rank() never scores the empty query)",
+   "bits": "3fefae147ae147ae"
+  },
+  {
+   "id": "empty-both",
+   "item": "",
+   "q": "",
+   "expr": "1",
+   "row": "score('','')",
+   "bits": "3ff0000000000000"
+  },
+  {
+   "id": "empty-item",
+   "item": "",
+   "q": "a",
+   "expr": "0",
+   "row": "indexOf on empty string",
+   "bits": "0000000000000000"
+  },
+  {
+   "id": "query-longer",
+   "item": "ab",
+   "q": "abc",
+   "expr": "0",
+   "row": "query longer than item",
+   "bits": "0000000000000000"
+  }
+ ],
+ "rankCases": [
+  {
+   "id": "tie-by-id",
+   "items": [
+    "zz open",
+    "open x",
+    "xopen",
+    "nothing",
+    "aa open"
+   ],
+   "q": "open",
+   "ids": [
+    1,
+    0,
+    4,
+    2
+   ],
+   "selected": 1,
+   "tieGroupsExpr": [
+    [
+     "0.99",
+     1
+    ],
+    [
+     "1*0.9",
+     2
+    ],
+    [
+     "1*0.17",
+     1
+    ]
+   ],
+   "row": "score desc, id asc; score 0 excluded",
+   "tieGroups": [
+    [
+     "3fefae147ae147ae",
+     1
+    ],
+    [
+     "3feccccccccccccd",
+     2
+    ],
+    [
+     "3fc5c28f5c28f5c3",
+     1
+    ]
+   ]
+  },
+  {
+   "id": "empty-query",
+   "items": [
+    "b",
+    "a",
+    "c"
+   ],
+   "q": "",
+   "ids": [
+    0,
+    1,
+    2
+   ],
+   "selected": 0,
+   "row": "empty q: all ids in dataset order"
+  },
+  {
+   "id": "no-results",
+   "items": [
+    "b",
+    "a"
+   ],
+   "q": "zz",
+   "ids": [],
+   "selected": null,
+   "row": "selected none"
+  },
+  {
+   "id": "space-query-rank",
+   "items": [
+    "xy",
+    "x y",
+    "x-y",
+    "x y"
+   ],
+   "q": " ",
+   "ids": [
+    1,
+    2,
+    3
+   ],
+   "selected": 1,
+   "row": "untrimmed ' ' query"
+  },
+  {
+   "id": "empty-dataset",
+   "items": [],
+   "q": "",
+   "ids": [],
+   "selected": null,
+   "row": "empty dataset"
+  }
+ ]
+}
