@@ -9,6 +9,15 @@ import { conformQuery, type Level, type Verdict } from '../../../parity/ranker-t
 
 export const SEED = process.env.LADDER_SEED ?? 'dev-1';
 const OUT = path.resolve(import.meta.dirname, '../../../dataset/out', SEED);
+/** Rung-neutral DOM contract (rungs/shared/CONTRACT.md). R1 uses cmdk's own attributes. */
+export const SEL = {
+  input: '[data-ladder-input], [cmdk-input]',
+  list: '[data-ladder-list], [cmdk-list]',
+  item: '[data-ladder-item], [cmdk-item]',
+};
+/** Correctness level for a project: R1 is tie-insensitive when typing (and set-only on backspace); R2+ strict everywhere. */
+export function r1Leniency(projectName: string): boolean { return projectName.startsWith('r1'); }
+
 export const SIZES = { '10k': 10_000, '50k': 50_000 } as const;
 export type SizeName = keyof typeof SIZES | '1k';
 
@@ -43,7 +52,7 @@ export async function openPalette(page: Page, size: SizeName) {
   await page.goto(`/?items=/dataset/${size}/items.json`);
   await page.waitForFunction((n) => window.__ladder?.dataset?.count === n, n, { timeout: 300_000, polling: 250 });
   await settle(page);
-  await page.evaluate(() => window.__ladder!.watchList('[cmdk-list]'));
+  await page.evaluate((sel) => window.__ladder!.watchList(sel), SEL.list);
   return { n, errors };
 }
 
@@ -70,18 +79,51 @@ export async function queryChange(page: Page, action: () => Promise<void>): Prom
   }, { n0, wallMs });
 }
 
-export interface DomResults { texts: string[]; selected: string | null; selectedIndex: number; inputValue: string }
+export interface DomResults {
+  texts: string[]; domIds: (number | null)[]; selected: string | null; selectedIndex: number; inputValue: string;
+  /** Full result list reported by a virtualized rung via window.__ladder.results(); null otherwise. */
+  full: { ids: number[]; selected: number | null; query: string } | null;
+}
 export async function readResults(page: Page): Promise<DomResults> {
-  return page.evaluate(() => {
-    const els = [...document.querySelectorAll<HTMLElement>('[cmdk-item]')];
+  return page.evaluate((SEL) => {
+    const els = [...document.querySelectorAll<HTMLElement>(SEL.item)];
     const selectedIndex = els.findIndex((e) => e.getAttribute('aria-selected') === 'true');
+    const L = window.__ladder as any;
+    const full = typeof L?.results === 'function' ? L.results() : null;
     return {
       texts: els.map((e) => e.textContent ?? ''),
+      domIds: els.map((e) => (e.dataset.id === undefined ? null : Number(e.dataset.id))),
       selected: selectedIndex >= 0 ? els[selectedIndex].textContent : null,
       selectedIndex,
-      inputValue: (document.querySelector('[cmdk-input]') as HTMLInputElement).value,
+      inputValue: (document.querySelector(SEL.input) as HTMLInputElement).value,
+      full: full ? { ids: [...full.ids], selected: full.selected ?? null, query: full.query } : null,
     };
+  }, SEL);
+}
+
+/**
+ * Resolve the displayed ranking. Non-virtualized rungs: every result is in the DOM. Virtualized rungs
+ * report the full list via __ladder.results(); the rows actually on screen must then be exactly the
+ * start of that list (tests read at scrollTop 0), with matching text, and the selected row must agree,
+ * so a rung cannot report one ranking and display another.
+ */
+export function resolveResults(dom: DomResults, items: string[], idOf: Map<string, number>): { ids: number[]; selected: number | null; selectedIndex: number } {
+  const rowIds = dom.texts.map((t, i) => dom.domIds[i] ?? idOf.get(t));
+  rowIds.forEach((id, i) => {
+    if (id === undefined) throw new Error(`DOM item not in dataset: ${JSON.stringify(dom.texts[i])}`);
+    expect(dom.texts[i], `row ${i} text matches dataset item ${id}`).toBe(items[id]);
   });
+  if (!dom.full) {
+    const selected = dom.selected === null ? null : idOf.get(dom.selected)!;
+    return { ids: rowIds as number[], selected, selectedIndex: dom.selectedIndex };
+  }
+  const { ids, selected } = dom.full;
+  expect(dom.full.query, 'results() query matches the input').toBe(dom.inputValue);
+  expect(rowIds.length, 'virtualized rung renders some rows when there are results').toBe(ids.length ? Math.max(1, rowIds.length) : 0);
+  expect(rowIds, 'rows on screen are the start of the reported ranking').toEqual(ids.slice(0, rowIds.length));
+  const selectedIndex = selected === null ? -1 : ids.indexOf(selected);
+  if (selectedIndex >= 0 && selectedIndex < rowIds.length) expect(dom.selectedIndex, 'selected row on screen agrees with results()').toBe(selectedIndex);
+  return { ids, selected, selectedIndex };
 }
 
 export function toIds(texts: string[], idOf: Map<string, number>): number[] {

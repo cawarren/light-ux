@@ -12,7 +12,7 @@
 // selected = first displayed item; order conformance is recorded (annotation `result`) and only
 // enforced with LADDER_STRICT_BACKSPACE=1.
 import { test, expect } from '@playwright/test';
-import { check, dataset, expectHonestFlip, openPalette, queries, queryChange, readResults, toIds } from './helpers.ts';
+import { check, dataset, expectHonestFlip, openPalette, queries, queryChange, readResults, resolveResults, r1Leniency, SEL } from './helpers.ts';
 
 function typedQueries(count: number, offset: number) {
   // Typeable queries (US layout, lower-case ASCII, digits, space): ascii-20 and multi-word prefixes.
@@ -35,7 +35,7 @@ for (const { size, n, qs } of PLAN) {
       test(`q${qid} ${JSON.stringify(q)}`, async ({ page }) => {
         const { items, idOf } = dataset(n);
         await openPalette(page, size);
-        await page.focus('[cmdk-input]');
+        await page.focus(SEL.input);
         const steps: string[] = [];
         for (let k = 1; k <= q.length; k++) steps.push(q.slice(0, k));
         for (let k = q.length - 1; k >= 0; k--) steps.push(q.slice(0, k));
@@ -47,19 +47,21 @@ for (const { size, n, qs } of PLAN) {
             s < q.length ? page.keyboard.type(q[s]) : page.keyboard.press('Backspace'));
           const dom = await readResults(page);
           expect(dom.inputValue).toBe(want);
-          const ids = toIds(dom.texts, idOf);
-          const selected = dom.selected === null ? null : idOf.get(dom.selected)!;
+          const { ids, selected, selectedIndex } = resolveResults(dom, items, idOf);
           const strict = check('strict', items, want, `${qid}/${s}`, ids, selected).verdict.pass;
           if (strict) strictHits++;
           const { verdict, ref } = check('tie-insensitive', items, want, `${qid}/${s}`, ids, selected);
           const msg = `step ${s} ${JSON.stringify(want)}: ${verdict.code} at rank ${verdict.firstDivergentRank}`;
-          if (s < q.length || process.env.LADDER_STRICT_BACKSPACE === '1') {
+          if (!r1Leniency(test.info().project.name)) {
+            // R2 and above: strict on every step, backspace included (decided 2026-09-30).
+            expect(strict, `${msg} (strict required for ${test.info().project.name})`).toBe(true);
+          } else if (s < q.length || process.env.LADDER_STRICT_BACKSPACE === '1') {
             expect(verdict.pass, msg).toBe(true);
           } else {
             expect([...ids].sort((a, b) => a - b), `${msg}: same result set`).toEqual([...ref.ids].sort((a, b) => a - b));
             if (!verdict.pass) backspaceOrderFailures.push({ step: s, code: verdict.code, rank: verdict.firstDivergentRank });
           }
-          expect(dom.selectedIndex).toBe(ids.length ? 0 : -1);
+          expect(selectedIndex).toBe(ids.length ? 0 : -1);
           expectHonestFlip(c, want);
         }
         test.info().annotations.push({ type: 'result', description: JSON.stringify({ size, qid, steps: steps.length, strictHits, backspaceOrderFailures }) });

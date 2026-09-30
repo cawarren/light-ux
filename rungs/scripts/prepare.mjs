@@ -22,6 +22,9 @@ const SIZES = { '1k': 1000, '10k': 10000, '50k': 50000 };
 const RUNGS = [
   { dir: 'rungs/r1-typical', served: ['public'] },
   { dir: 'rungs/r1-vite', served: ['public', 'dist'] },
+  // R2+ (rungs/shared/CONTRACT.md): runtime files in public/, copied into dist/ if it exists.
+  { dir: 'rungs/r2-diligent', served: ['public', 'dist'] },
+  { dir: 'rungs/r3-no-framework', served: ['public', 'dist'] },
 ];
 
 const out = path.join(root, 'dataset/out', seedId);

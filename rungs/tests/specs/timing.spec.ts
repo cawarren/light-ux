@@ -7,7 +7,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { test } from '@playwright/test';
-import { openPalette, queryChange } from './helpers.ts';
+import { openPalette, queryChange, SEL } from './helpers.ts';
 
 const FILLS = ['open', 'a', 'sett', 'git br'];
 const results: Record<string, unknown>[] = [];
@@ -18,7 +18,7 @@ for (const size of ['10k', '50k'] as const) {
       const t0 = Date.now();
       await openPalette(page, size);
       const mountMs = Date.now() - t0;
-      const c = await queryChange(page, () => page.fill('[cmdk-input]', q));
+      const c = await queryChange(page, () => page.fill(SEL.input, q));
       await page.waitForTimeout(300);
       const r = await page.evaluate((seq) => {
         const L = window.__ladder!;
